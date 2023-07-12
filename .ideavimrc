@@ -1,0 +1,66 @@
+let mapleader=" "
+" See :h keycodes
+" Find more examples here: https://jb.gg/share-ideavimrc
+
+""" Plugins  ---
+Plug 'vim-scripts/argtextobj.vim'
+Plug 'easymotion/vim-easymotion'
+Plug 'machakann/vim-highlightedyank'
+Plug 'preservim/nerdtree'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'tommcdo/vim-exchange'
+
+""" Plugin settings ---
+let g:argtextobj_pairs="[:],(:),<:>"
+
+""" Common settings ---
+set showmode
+set so=5
+set incsearch
+set nu
+
+""" Idea specific settings ---
+set ideajoin
+set ideastatusicon=gray
+
+""" My Mappings ---
+map <leader>F <Plug>(easymotion-s)
+map <leader>f <Plug>(easymotion-f)
+
+" NERDTree
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+
+" Run & Debug
+map <leader>rc <Action>(ContextRun)
+map <leader>rf <Action>(ChooseRunConfiguration)
+maf <leader>rr <Action>(Rerun)
+" map <leader>dc <Action>(ContextDebug)
+" map <leader>df <Action>(ChooseDebugConfiguration)
+
+" Terminal
+map <leader>tt <Action>(ActivateTerminalToolWindow)
+
+" View mode
+map <leader>vf <Action>(ToggleFullScreen)
+map <leader>vv <Action>(ToggleDistractionFreeMode)
+map <leader>vp <Action>(TogglePresentationMode)
+
+" Panes
+map <leader>sv <Action>(SplitVertically)
+map <leader>sh <Action>(SplitHorizontally)
+map <leader>su <Action>(Unsplit)
+map <C-k> <C-w>k
+map <C-j> <C-w>j
+map <C-h> <C-w>h
+map <C-l> <C-w>l
+
+" Move line up/down
+map <M-k> <Action>(MoveLineUp)
+map <M-j> <Action>(MoveLineDown)
+
+" Don't use Ex mode, use Q for formatting.
+map Q gq
+
