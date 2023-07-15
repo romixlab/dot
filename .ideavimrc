@@ -1,6 +1,7 @@
 let mapleader=" "
 " See :h keycodes
 " Find more examples here: https://jb.gg/share-ideavimrc
+" https://github.com/JetBrains/ideavim/blob/master/doc/emulated-plugins.md
 
 """ Plugins  ---
 Plug 'vim-scripts/argtextobj.vim'
@@ -18,6 +19,9 @@ set showmode
 set so=5
 set incsearch
 set nu
+set relativenumber
+set number
+set surround
 
 """ Idea specific settings ---
 set ideajoin
@@ -27,18 +31,22 @@ set ideastatusicon=gray
 map <leader>F <Plug>(easymotion-s)
 map <leader>f <Plug>(easymotion-f)
 
+map <Leader>w <Action>(JumpToLastWindow)
+
+map <Leader>a :action RenameElement<CR>
+map <Leader>s Action(FileStructurePopup)
+map <Leader>i <Action>(GotoImplementation)
+map <Leader>m <Action>(GotoImplementation)
+map <Leader>d <Action>(GotoDeclaration)
+
 " NERDTree
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
+map <Leader>n :NERDTree<CR>
+nnoremap <C-n> :NERDTreeFocus<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
 " Run & Debug
-map <leader>rc <Action>(ContextRun)
-map <leader>rf <Action>(ChooseRunConfiguration)
-maf <leader>rr <Action>(Rerun)
-" map <leader>dc <Action>(ContextDebug)
-" map <leader>df <Action>(ChooseDebugConfiguration)
+map <Leader>r <Action>(ChooseRunConfiguration)
 
 " Terminal
 map <leader>tt <Action>(ActivateTerminalToolWindow)
@@ -55,11 +63,27 @@ map <leader>su <Action>(Unsplit)
 map <C-k> <C-w>k
 map <C-j> <C-w>j
 map <C-h> <C-w>h
-map <C-l> <C-w>l
+map <C-l> <C-w>
+
+" Space for jumping to the next error or issue
+map <Space> <Action>(GotoNextError)
+
+" The default C-o and C-i behaviours have certain inconsistencies with
+" Vim which I can't quite pinpoint.
+" I'm using the default IntelliJ behaviours instead.
+map <C-o> <Action>(Back)
+map <C-i> <Action>(Forward)
+map g; <Action>(JumpToLastChange)
+map g, <Action>(JumpToNextChange)
 
 " Move line up/down
 map <M-k> <Action>(MoveLineUp)
 map <M-j> <Action>(MoveLineDown)
+
+" Can also use Ctrl-Shift-[
+map <Leader>[ <Action>(EditorCodeBlockStart)
+" Can also use Ctrl-Shift-]
+map <Leader>] <Action>(EditorCodeBlockEnd)
 
 " Don't use Ex mode, use Q for formatting.
 map Q gq
