@@ -63,16 +63,16 @@ map <leader>su <Action>(Unsplit)
 map <C-k> <C-w>k
 map <C-j> <C-w>j
 map <C-h> <C-w>h
-map <C-l> <C-w>
+map <C-l> <C-w>l
 
 " Space for jumping to the next error or issue
-map <Space> <Action>(GotoNextError)
+map <Space><Space> <Action>(GotoNextError)
 
 " The default C-o and C-i behaviours have certain inconsistencies with
 " Vim which I can't quite pinpoint.
 " I'm using the default IntelliJ behaviours instead.
-map <C-o> <Action>(Back)
-map <C-i> <Action>(Forward)
+map <C-i> <Action>(Back)
+map <C-o> <Action>(Forward)
 map g; <Action>(JumpToLastChange)
 map g, <Action>(JumpToNextChange)
 
@@ -86,5 +86,5 @@ map <Leader>[ <Action>(EditorCodeBlockStart)
 map <Leader>] <Action>(EditorCodeBlockEnd)
 
 " Don't use Ex mode, use Q for formatting.
-map Q gq
+" map Q gq
 
