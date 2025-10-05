@@ -1,0 +1,1 @@
+- Overwrite /usr/share/X11/locale/en_US.UTF-8/Compose with /usr/share/keyd/keyd.compose
