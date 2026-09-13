@@ -1,0 +1,47 @@
+// https://github.com/jellydn/zed-101-setup
+[
+  {
+    "context": "Editor && vim_mode == normal && !VimWaiting && !menu",
+    "bindings": {
+      "space i": "editor::ToggleCodeActions",
+      "space t": "workspace::OpenInTerminal",
+      "space m": "editor::ExpandMacroRecursively",
+      "space w": "pane::CloseActiveItem",
+      "space s": "outline::Toggle",
+
+      "space a": "editor::Rename",
+      "space g": "editor::GoToImplementation",
+      "space d": "editor::GoToDefinition",
+
+      "space r": "task::Spawn",
+
+      "space e": "editor::GoToDiagnostic",
+
+      "space s v": "pane::SplitRight",
+      "space s h": "pane::SplitDown",
+
+      // Pane navigation
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight",
+
+      // Navigation history
+      "space b": "pane::GoBack",
+      "space f": "pane::GoForward",
+
+      // Move lines
+      "alt-j": "editor::MoveLineDown",
+      "alt-k": "editor::MoveLineUp",
+
+      // Project panel
+      "ctrl-t": "project_panel::ToggleFocus",
+    },
+  },
+  {
+    "context": "Editor && vim_mode == visual",
+    "bindings": {
+      "shift-x": "vim::Exchange",
+    },
+  },
+]
