@@ -51,26 +51,8 @@ omarchy pkg add freecad just keepassxc kicad syncthing uv
 omarchy pkg aur add winbox
 ```
 
-## 1. Terminal font size (9 → 11) across all terminals
 
-```bash
-# Alacritty
-sed -i 's/^size = 9$/size = 11/' ~/.config/alacritty/alacritty.toml
-
-# foot
-sed -i 's/font=JetBrainsMono Nerd Font:size=9/font=JetBrainsMono Nerd Font:size=11/' ~/.config/foot/foot.ini
-
-# Ghostty (also lower the scroll multiplier — see step 2)
-sed -i 's/^font-size = 9$/font-size = 11/' ~/.config/ghostty/config
-
-# Kitty has no default font-size line; append an override
-echo 'font_size 11.0' >> ~/.config/kitty/kitty.conf
-```
-
-Reload: `omarchy restart terminal` (or just open new windows for foot/kitty).
-
-
-## 2. Auto night light schedule
+## 1. Auto night light schedule
 
 ```bash
 cat >> ~/.config/hypr/autostart.lua <<'EOF'
@@ -87,26 +69,38 @@ profile {
 }
 ```
 
-## 3. SSH agent socket for GUI apps
+## 2. SSH agent socket (KeePassXC-backed)
 
-KeePassXC manages a real `ssh-agent` (systemd `--user ssh-agent.service`)
-instead of running its own agent socket. Shells pick up `SSH_AUTH_SOCK` from
-`~/.bashrc`, but apps Hyprland launches directly (not from a shell) need it
-set here too:
+KeePassXC manages a real `ssh-agent` instead of running its own agent socket.
+Point `SSH_AUTH_SOCK` at it and enable the socket unit (ships disabled on
+Arch even though its preset says `enabled`):
 
 ```bash
 cat >> ~/.config/hypr/hyprland.lua <<'EOF'
-
--- Real ssh-agent (systemd --user ssh-agent.service); KeePassXC adds/removes
--- keys into it rather than running its own agent socket. GUI apps launched
--- by Hyprland need this too, not just shells (~/.bashrc sets it there).
 hl.env("SSH_AUTH_SOCK", (os.getenv("XDG_RUNTIME_DIR") or "/run/user/1000") .. "/ssh-agent.socket")
 EOF
+
+systemctl --user enable --now ssh-agent.socket
 ```
 
-Requires the systemd user `ssh-agent.service` and KeePassXC's SSH-agent
-integration to actually be set up — this line alone just points GUI apps at
-the socket.
+Verify: `ssh-add -l` should print `The agent has no identities.` (not a
+connection error) once KeePassXC's SSH Agent integration (Tools → Settings →
+SSH Agent → Enable) has a database open. Vault lives under
+`~/sync/by_letter/P/`.
+
+KeePassXC runs via XWayland (no `qt5-wayland` installed) so it renders
+tiny/unscaled on HiDPI — fix by forcing scale on its desktop entry only:
+
+```bash
+mkdir -p ~/.local/share/applications
+cp /usr/share/applications/org.keepassxc.KeePassXC.desktop ~/.local/share/applications/
+sed -i 's/^Exec=keepassxc %f/Exec=env QT_SCALE_FACTOR=2 keepassxc %f/' \
+  ~/.local/share/applications/org.keepassxc.KeePassXC.desktop
+```
+
+For generating keys and attaching them to KeePassXC entries (and an optional
+`ssh-askpass` fallback), see
+[this KeePassXC/ssh-agent writeup](https://blog.burakcankus.com/keepassxc-and-ssh-agent-setup/).
 
 ## 4. Keybindings
 
@@ -121,11 +115,17 @@ o.bind("SUPER + SHIFT + Z", "Move window to workspace 11", hl.dsp.window.move({ 
 o.bind("SUPER + R", "Screenshot region to clipboard", "omarchy-capture-screenshot region copy")
 -- Screenshot region -> save to ~/Downloads
 o.bind("SUPER + SHIFT + R", "Screenshot region to Downloads", "OMARCHY_SCREENSHOT_DIR=$HOME/Downloads omarchy-capture-screenshot region save")
+
+-- Power menu on SUPER+SHIFT+P (was: Google Photos)
+hl.unbind("SUPER + SHIFT + P")
+o.bind("SUPER + SHIFT + P", "Power menu", "omarchy-menu toggle system")
 ```
 
-Check `omarchy menu keybindings --print` first if SUPER+R / SUPER+SHIFT+R
-already do something by default on the new machine's Omarchy version — unbind
-with `hl.unbind("SUPER + R")` before rebinding if so.
+Check `omarchy menu keybindings --print` first if SUPER+R / SUPER+SHIFT+R /
+SUPER+SHIFT+P already do something by default on the new machine's Omarchy
+version — unbind with `hl.unbind(...)` before rebinding if so. (The hardware
+power button, `XF86PowerOff`, keeps opening the power menu too — this just
+adds a keyboard shortcut alongside it.)
 
 ## 5. Bar/shell UI font size
 
@@ -376,6 +376,7 @@ entry (leave everything else in the file as installed):
 - **Left section:** use `roman.workspaces` (from step 9) instead of `omarchy.workspaces`.
 - **Right section:** add `omarchy.tailscale` (skip this if you ran `omarchy install service tailscale` in step 0 — it already adds this widget).
 - **Clock widget:** change `format` to `"ddd d MMM HH:mm"` and add `"birthYear": 1995, "lifeExpectancy": 90` (life-calendar mode).
+- **Idle:** `screensaver` doubled from the stock 150s to 300s (now equal to `lock`, so the screensaver and lock trigger at the same time).
 
 Resulting shape:
 
@@ -416,7 +417,7 @@ Resulting shape:
     "position": "top",
     "transparent": false
   },
-  "idle": { "lock": 300, "screensaver": 150 },
+  "idle": { "lock": 300, "screensaver": 300 },
   "plugins": [],
   "version": 1
 }
