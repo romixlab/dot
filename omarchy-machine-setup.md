@@ -376,7 +376,7 @@ entry (leave everything else in the file as installed):
 - **Left section:** use `roman.workspaces` (from step 9) instead of `omarchy.workspaces`.
 - **Right section:** add `omarchy.tailscale` (skip this if you ran `omarchy install service tailscale` in step 0 — it already adds this widget).
 - **Clock widget:** change `format` to `"ddd d MMM HH:mm"` and add `"birthYear": 1995, "lifeExpectancy": 90` (life-calendar mode).
-- **Idle:** `screensaver` doubled from the stock 150s to 300s (now equal to `lock`, so the screensaver and lock trigger at the same time).
+- **Idle:** both doubled from stock — `screensaver` 150s → 300s, `lock` 300s → 600s. Keep `screensaver` less than `lock` (stock 1:2 ratio) or the screensaver never gets a chance to show before the lock fires.
 
 Resulting shape:
 
@@ -417,7 +417,7 @@ Resulting shape:
     "position": "top",
     "transparent": false
   },
-  "idle": { "lock": 300, "screensaver": 300 },
+  "idle": { "lock": 600, "screensaver": 300 },
   "plugins": [],
   "version": 1
 }
