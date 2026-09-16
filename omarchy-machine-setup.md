@@ -47,7 +47,7 @@ omarchy install service tailscale
 Everything else is a plain repo package except `winbox`, which is AUR-only:
 
 ```bash
-omarchy pkg add freecad just keepassxc kicad syncthing uv
+omarchy pkg add freecad just keepassxc kicad syncthing uv speedcrunch
 omarchy pkg aur add winbox
 ```
 
@@ -101,6 +101,17 @@ sed -i 's/^Exec=keepassxc %f/Exec=env QT_SCALE_FACTOR=2 keepassxc %f/' \
 For generating keys and attaching them to KeePassXC entries (and an optional
 `ssh-askpass` fallback), see
 [this KeePassXC/ssh-agent writeup](https://blog.burakcankus.com/keepassxc-and-ssh-agent-setup/).
+
+## 3. Firewall: allow Syncthing (port 22000)
+
+`ufw` is enabled with default-deny incoming. Stock rules only allow 53317
+(LocalSend) plus Docker DNS; Syncthing (installed in step 0) listens on
+22000/tcp+udp but was unreachable from other machines until opened:
+
+```bash
+sudo ufw allow 22000/tcp
+sudo ufw allow 22000/udp
+```
 
 ## 4. Keybindings
 
@@ -425,6 +436,41 @@ Resulting shape:
 
 `birthYear`/`lifeExpectancy` are personal — adjust or drop them.
 
+## 8. Power menu: remove Suspend and Hibernate (Proxmox VM)
+
+Both break the guest under Proxmox (no working ACPI S3/S4 in this VM), so
+they're hidden from the system menu:
+
+```bash
+omarchy toggle suspend   # sets the suspend-off flag the stock menu's `when` already checks
+```
+
+`omarchy toggle` has no equivalent for hibernate, so it's hidden via a menu
+override instead. Append to `~/.config/omarchy/extensions/omarchy-menu.jsonc`
+(before the closing `}`):
+
+```jsonc
+"system.hibernate": {"when":"false"},
+```
+
+Both are hot-reloaded/flag-based — no restart needed. Reversible: `omarchy
+toggle suspend` again for suspend; delete the `system.hibernate` line for
+hibernate.
+
+## 9. Zed Settings
+
+Copy settings.json and keymap.json to ~/.config/zed/
+
+## 10. Workspace app launcher
+
+Opens Firefox/terminal/SpeedCrunch+Obsidian/KeePassXC/Zed onto fixed
+workspaces (silent, no focus stealing) on `SUPER SHIFT + U`. Script file and
+full writeup live in
+[`hypr-workspace-launcher/`](hypr-workspace-launcher/README.md):
+
+```bash
+cat hypr-workspace-launcher/bindings.lua >> ~/.config/hypr/bindings.lua
+```
 
 ---
 
