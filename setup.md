@@ -8,7 +8,7 @@ nothing here touches `/usr/share/omarchy/`. Files referenced below live in
 Not customizations (verified stock or auto-generated — skip on a new machine):
 `~/.config/omarchy/branding/{about.txt,screensaver.txt}`,
 `~/.config/omarchy/hooks/post-update.d/{install-voxtype,setup-agent,setup-fingerprint}.hook`,
-comment-only diffs in `hypr/input.lua`/`omarchy-menu.jsonc`, `*.bak.<timestamp>` files.
+comment-only diffs in `omarchy-menu.jsonc`, `*.bak.<timestamp>` files.
 
 ## 0. Packages
 
@@ -109,6 +109,15 @@ cat hypr-workspace-launcher/bindings.lua >> ~/.config/hypr/bindings.lua
 ```
 
 ---
+
+## 11. Natural (inverted) trackpad scroll
+
+Hyprland has no per-axis scroll invert — this flips both horizontal and
+vertical scroll together.
+
+```bash
+cat omarchy-setup/input-append.lua >> ~/.config/hypr/input.lua
+```
 
 ## After applying
 
