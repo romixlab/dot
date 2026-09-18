@@ -119,6 +119,36 @@ vertical scroll together.
 cat omarchy-setup/input-append.lua >> ~/.config/hypr/input.lua
 ```
 
+## 12. SuperSlicer desktop launcher
+
+AppImage downloaded to `~/Downloads`, no bundled desktop integration.
+
+```bash
+mv ~/Downloads/SuperSlicer-*.AppImage ~/.local/bin/superslicer.AppImage
+chmod +x ~/.local/bin/superslicer.AppImage
+cd /tmp && ~/.local/bin/superslicer.AppImage --appimage-extract SuperSlicer.png
+cp squashfs-root/SuperSlicer.png ~/.local/share/icons/superslicer.png
+rm -rf squashfs-root
+```
+
+Create `~/.local/share/applications/superslicer.desktop`:
+
+```ini
+[Desktop Entry]
+Name=SuperSlicer
+Comment=3D printing slicer
+Exec=/home/roman/.local/bin/superslicer.AppImage %F
+Icon=superslicer
+Type=Application
+Categories=Graphics;3DGraphics;
+MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;
+Terminal=false
+```
+
+```bash
+update-desktop-database ~/.local/share/applications/
+```
+
 ## After applying
 
 ```bash
