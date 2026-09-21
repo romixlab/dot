@@ -166,6 +166,46 @@ systemctl --user restart xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desk
 Then fully restart Firefox. Verify: `about:support` → Window Protocol = `wayland`;
 video playing past the screensaver timeout doesn't trigger it.
 
+## 14. Brightness synced across both external monitors
+
+Apply as is only if the machine has two identical external (DDC) monitors
+connected; otherwise adapt to the local setup (the script skips laptop panels
+and applies the same step to every other monitor).
+
+Keys and the menu slider adjust all DDC monitors together. `roman.monitor` is a
+clone of `omarchy.monitor` with `setBrightness` calling the sync script; it
+replaces `omarchy.monitor` in `shell.json` (already in step 7's file).
+
+```bash
+cp omarchy-setup/omarchy-brightness-display-sync ~/.local/bin/
+cat omarchy-setup/brightness-bindings-append.lua >> ~/.config/hypr/bindings.lua
+cp -r omarchy-setup/roman.monitor ~/.config/omarchy/plugins/
+```
+
+## 15. Ghostty as default terminal
+
+```bash
+omarchy default terminal ghostty
+```
+
+## 16. WinBox HiDPI
+
+XWayland is unscaled under Omarchy; force Qt scale 2 (drop the Qt platform override).
+
+```bash
+cp omarchy-setup/winbox.desktop ~/.local/share/applications/
+update-desktop-database ~/.local/share/applications/
+```
+
+## 17. Screensaver: dismiss on any key or mouse move
+
+Patches a package file — an Omarchy update overwrites it, reapply after updates.
+Skip if the patch no longer applies (upstream may have fixed it).
+
+```bash
+sudo patch /usr/bin/omarchy-screensaver < omarchy-setup/omarchy-screensaver.patch
+```
+
 ## After applying
 
 ```bash

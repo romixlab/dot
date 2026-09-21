@@ -1,0 +1,26 @@
+#!/bin/bash
+# Apply a brightness step to every connected external (DDC) monitor at once,
+# keeping DP-1/DP-2 in sync instead of only adjusting the focused display.
+
+set -euo pipefail
+
+no_osd=0
+if [[ "${1:-}" == "--no-osd" ]]; then
+  no_osd=1
+  shift
+fi
+
+step="${1:?usage: omarchy-brightness-display-sync [--no-osd] <+N%|N%-|N%>}"
+
+mapfile -t monitors < <(hyprctl monitors -j | jq -r '.[] | select(.disabled == false) | .name')
+
+result=""
+for monitor in "${monitors[@]}"; do
+  [[ $monitor =~ ^(eDP|LVDS|DSI)- ]] && continue
+  out="$(omarchy-brightness-display-ddc "$monitor" "$step")" || continue
+  result="$out"
+done
+
+[[ -n $result ]] || exit 1
+(( no_osd )) || omarchy-osd -i brightness -p "$result"
+printf '%s\n' "$result"

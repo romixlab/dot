@@ -27,7 +27,7 @@
         { "id": "omarchy.bluetooth" },
         { "id": "omarchy.network" },
         { "id": "omarchy.audio" },
-        { "id": "omarchy.monitor" },
+        { "id": "roman.monitor" },
         { "id": "omarchy.power" }
       ]
     },
