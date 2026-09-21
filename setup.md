@@ -206,6 +206,12 @@ Skip if the patch no longer applies (upstream may have fixed it).
 sudo patch /usr/bin/omarchy-screensaver < omarchy-setup/omarchy-screensaver.patch
 ```
 
+## 18. Slimmer Hyprland group headers
+
+```bash
+cat omarchy-setup/looknfeel-append.lua >> ~/.config/hypr/looknfeel.lua
+```
+
 ## After applying
 
 ```bash
