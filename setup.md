@@ -275,8 +275,13 @@ Deliberately doesn't shadow `grep` with `rg` — `rg` skips hidden/gitignored/bi
 files by default, which would silently hide matches vs. real grep. Use `rg`
 directly instead.
 
+Check the "Add your own exports, aliases, and functions here" section of
+`~/.bashrc` first — if it already has content (e.g. hand-added on the machine,
+or this step re-run), merge by hand instead of blindly appending, to avoid
+duplicate/conflicting aliases.
+
 ```bash
-cat omarchy-setup/bashrc-append.sh >> ~/.bashrc
+cat omarchy-setup/bashrc-append.sh >> ~/.bashrc   # only if that section is empty/stock
 ```
 
 ## After applying
