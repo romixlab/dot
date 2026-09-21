@@ -6,7 +6,7 @@ nothing here touches `/usr/share/omarchy/`. Files referenced below live in
 [`omarchy-setup/`](omarchy-setup/).
 
 Not customizations (verified stock or auto-generated — skip on a new machine):
-`~/.config/omarchy/branding/{about.txt,screensaver.txt}`,
+`~/.config/omarchy/branding/about.txt`,
 `~/.config/omarchy/hooks/post-update.d/{install-voxtype,setup-agent,setup-fingerprint}.hook`,
 comment-only diffs in `omarchy-menu.jsonc`, `*.bak.<timestamp>` files.
 
@@ -248,6 +248,26 @@ omarchy restart shell
 A hot-reload after copying the plugin files in-place (without a restart)
 leaves two lock-service instances alive at once (duplicate `WlSessionLock`,
 IPC handler collision) — always restart the shell after touching this one.
+
+## 21. Screensaver branding art fits a narrower terminal
+
+Only apply on non-standard displays — rotated/portrait panels or unusual
+scale factors (e.g. this GPD-class handheld: `transform=3`, `scale=2`,
+forced `GDK_SCALE=2`). There, Ghostty's screensaver terminal (forced
+`--font-size=18`) renders far fewer columns than usual (~75 here), so the
+stock 81-column Omarchy wordmark overflows both edges. Skip on normal
+monitors — the stock art fits fine there.
+
+```bash
+cp omarchy-setup/screensaver-narrow.txt ~/.config/omarchy/branding/screensaver.txt
+```
+
+Regenerate instead of reusing this file if the wordmark ever changes
+upstream, or the available columns differ on another such machine:
+
+```bash
+omarchy transcode ascii /usr/share/omarchy/logo.svg ~/.config/omarchy/branding/screensaver.txt --width 70 --mode block
+```
 
 ## After applying
 
