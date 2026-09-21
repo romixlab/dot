@@ -212,6 +212,16 @@ sudo patch /usr/bin/omarchy-screensaver < omarchy-setup/omarchy-screensaver.patc
 cat omarchy-setup/looknfeel-append.lua >> ~/.config/hypr/looknfeel.lua
 ```
 
+## 19. Thinner top bar
+
+Only apply on computers with a small physical screen size (e.g. GPD-class
+handhelds); skip on normal-size monitors/laptops, where the default bar
+height reads fine. Shrinks the bar token from the default 26px down to 20px.
+
+```bash
+cat omarchy-setup/shell-bar-thin-append.toml >> ~/.config/omarchy/shell.toml
+```
+
 ## After applying
 
 ```bash
