@@ -5,7 +5,7 @@ hl.config({
     groupbar = {
       height = 16,
       font_size = 11,
-      indicator_gap = 3,
+      indicator_gap = 0,
     },
   },
 })
