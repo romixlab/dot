@@ -269,6 +269,16 @@ upstream, or the available columns differ on another such machine:
 omarchy transcode ascii /usr/share/omarchy/logo.svg ~/.config/omarchy/branding/screensaver.txt --width 70 --mode block
 ```
 
+## 22. Personal bash aliases
+
+Deliberately doesn't shadow `grep` with `rg` — `rg` skips hidden/gitignored/binary
+files by default, which would silently hide matches vs. real grep. Use `rg`
+directly instead.
+
+```bash
+cat omarchy-setup/bashrc-append.sh >> ~/.bashrc
+```
+
 ## After applying
 
 ```bash
