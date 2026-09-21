@@ -35,6 +35,8 @@
     "transparent": false
   },
   "idle": { "lock": 600, "screensaver": 300 },
-  "plugins": [],
-  "version": 1
+  "plugins": [{ "id": "roman.lock" }],
+  "version": 1,
+  "disabledPlugins": ["omarchy.lock"],
+  "cloneSourceRestores": ["roman.lock"]
 }

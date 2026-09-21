@@ -222,6 +222,33 @@ height reads fine. Shrinks the bar token from the default 26px down to 20px.
 cat omarchy-setup/shell-bar-thin-append.toml >> ~/.config/omarchy/shell.toml
 ```
 
+## 20. Lock screen: Escape suspends
+
+Skip on virtualized machines (e.g. the Proxmox VM `omarchy-pve`) — no working
+ACPI suspend there, same reason as step 8.
+
+At the password prompt, Escape now clears the field and suspends
+(`systemctl suspend`) instead of just clearing it — for when the screen woke
+accidentally and you just want it back asleep. Ctrl+U still clears without
+suspending. No-op while a password is mid-check (won't fire during PAM
+verify). Clone of `omarchy.lock`.
+
+```bash
+cp -r omarchy-setup/roman.lock ~/.config/omarchy/plugins/
+```
+
+Merges into `~/.config/omarchy/shell.json` (already in step 7's file): adds
+`"roman.lock"` to `plugins`, `"omarchy.lock"` to `disabledPlugins`, and
+`"roman.lock"` to `cloneSourceRestores`.
+
+```bash
+omarchy restart shell
+```
+
+A hot-reload after copying the plugin files in-place (without a restart)
+leaves two lock-service instances alive at once (duplicate `WlSessionLock`,
+IPC handler collision) — always restart the shell after touching this one.
+
 ## After applying
 
 ```bash
