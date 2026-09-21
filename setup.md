@@ -149,6 +149,23 @@ Terminal=false
 update-desktop-database ~/.local/share/applications/
 ```
 
+## 13. Firefox video doesn't inhibit screensaver
+
+Firefox uses the portal `Inhibit` interface first; the GTK backend fakes
+success under Hyprland, so Firefox never falls back to native Wayland
+`idle-inhibit-v1` (which Omarchy's idle service respects). Disable that
+backend for `Inhibit` (needs xdg-desktop-portal >= 1.18.4; keep
+`xdg-desktop-portal-gtk` installed).
+
+```bash
+mkdir -p ~/.config/xdg-desktop-portal
+cp omarchy-setup/hyprland-portals.conf ~/.config/xdg-desktop-portal/
+systemctl --user restart xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+```
+
+Then fully restart Firefox. Verify: `about:support` → Window Protocol = `wayland`;
+video playing past the screensaver timeout doesn't trigger it.
+
 ## After applying
 
 ```bash
