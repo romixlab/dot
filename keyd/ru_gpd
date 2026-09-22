@@ -51,6 +51,7 @@ leftmeta = layer(undo_ru)
 
 , = б
 . = ю
+` = ё
 1 = 1
 2 = 2
 3 = 3
@@ -98,6 +99,7 @@ l+a = setlayout(main)
 
 , = Б
 . = Ю
+` = Ё
 1 = !
 2 = "
 3 = №
