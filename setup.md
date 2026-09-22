@@ -214,13 +214,22 @@ cat omarchy-setup/looknfeel-append.lua >> ~/.config/hypr/looknfeel.lua
 
 ## 19. Thinner top bar
 
-Only apply on computers with a small physical screen size (e.g. GPD-class
-handhelds); skip on normal-size monitors/laptops, where the default bar
-height reads fine. Shrinks the bar token from the default 26px down to 20px.
+Two variants of the same `[bar] size-horizontal` token, stock default 26px.
+Applying both is pointless — the second append would just win; pick one.
 
-```bash
-cat omarchy-setup/shell-bar-thin-append.toml >> ~/.config/omarchy/shell.toml
-```
+- **Moderate — all machines.** A bit smaller than stock but still reads fine
+  on normal monitors/laptops. Applies everywhere, not screen-size-gated.
+
+  ```bash
+  cat omarchy-setup/shell-bar-thin-moderate-append.toml >> ~/.config/omarchy/shell.toml
+  ```
+
+- **Aggressive — small physical screens only** (e.g. GPD-class handhelds).
+  26px down to 20px; too cramped on normal-size monitors/laptops, skip there.
+
+  ```bash
+  cat omarchy-setup/shell-bar-thin-append.toml >> ~/.config/omarchy/shell.toml
+  ```
 
 ## 20. Lock screen: Escape suspends
 
