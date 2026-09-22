@@ -284,6 +284,25 @@ duplicate/conflicting aliases.
 cat omarchy-setup/bashrc-append.sh >> ~/.bashrc   # only if that section is empty/stock
 ```
 
+## 23. Verify `~/.bashrc` is Omarchy's own, not the plain Arch skeleton
+
+Seen on a fresh install: `~/.bashrc` ends up as `/etc/skel/.bashrc` instead of
+Omarchy's template (`/usr/share/omarchy/etc-overrides/dot.bashrc`) — missing the
+`OMARCHY_PATH` bootstrap and all of Omarchy's default aliases/functions. Run this
+check before step 22:
+
+```bash
+grep -q 'OMARCHY_PATH/default/bash/rc' ~/.bashrc || echo "NOT Omarchy's bashrc — needs replacing"
+```
+
+If it prints that, replace it, then reapply step 22's append on top:
+
+```bash
+cp ~/.bashrc ~/.bashrc.bak.$(date +%Y%m%d%H%M%S)
+cp /usr/share/omarchy/etc-overrides/dot.bashrc ~/.bashrc
+cat omarchy-setup/bashrc-append.sh >> ~/.bashrc
+```
+
 ## After applying
 
 ```bash
