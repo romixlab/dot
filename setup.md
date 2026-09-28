@@ -379,6 +379,19 @@ Verify:
 cat /sys/class/power_supply/macsmc-battery/charge_control_end_threshold   # -> 80
 ```
 
+## 26. USB device access without root
+
+Grants the logged-in user rw on raw USB (libusb), USB hidraw (WebHID/VIA/security
+keys) and USB serial (`ttyUSB*`/`ttyACM*`) via systemd `uaccess` — no groups, no relogin.
+
+```bash
+sudo install -m 644 omarchy-setup/70-usb-uaccess.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=usb --subsystem-match=hidraw --subsystem-match=tty
+```
+
+Verify: `getfacl /dev/bus/usb/*/* | grep "user:$USER"`.
+
 ## After applying
 
 ```bash

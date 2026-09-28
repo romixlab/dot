@@ -1,0 +1,11 @@
+# Grant the logged-in (active seat) user access to all USB devices without root.
+# Must sort before 73-seat-late.rules for the uaccess tag to take effect.
+
+# Raw USB devices (/dev/bus/usb/*/*) used by libusb tools
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", TAG+="uaccess"
+
+# USB HID devices (/dev/hidraw*) used by WebHID, VIA, security keys, etc.
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", SUBSYSTEMS=="usb", TAG+="uaccess"
+
+# USB serial devices (/dev/ttyUSB*, /dev/ttyACM*)
+SUBSYSTEM=="tty", KERNEL=="ttyUSB[0-9]*|ttyACM[0-9]*", TAG+="uaccess"
