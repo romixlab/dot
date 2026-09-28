@@ -347,6 +347,28 @@ Verify: play a video in VLC past the screensaver timeout, screen stays awake;
 visible as `~/.local/state/omarchy/indicators/stay-awake` existing), reverts
 within a second of stopping/closing VLC.
 
+## 25. Limit battery charge to 80%
+
+Only on machines with the `macsmc-battery` driver (Apple Silicon/Asahi, e.g.
+this M1 laptop) — check `ls /sys/class/power_supply/ | grep macsmc-battery`
+first. Sysfs threshold resets to 100 on reboot and can reset across
+suspend/resume too, so a boot-time oneshot unit plus a system-sleep hook both
+reapply it.
+
+```bash
+sudo cp omarchy-setup/battery-charge-threshold.service /etc/systemd/system/
+sudo systemctl enable --now battery-charge-threshold.service
+
+sudo install -m 755 -o root -g root omarchy-setup/battery-charge-threshold-sleep.sh \
+  /etc/systemd/system-sleep/battery-charge-threshold.sh
+```
+
+Verify:
+
+```bash
+cat /sys/class/power_supply/macsmc-battery/charge_control_end_threshold   # -> 80
+```
+
 ## After applying
 
 ```bash
