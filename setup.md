@@ -392,6 +392,18 @@ sudo udevadm trigger --subsystem-match=usb --subsystem-match=hidraw --subsystem-
 
 Verify: `getfacl /dev/bus/usb/*/* | grep "user:$USER"`.
 
+## 27. Rust embedded toolchain (rustup, cargo-binstall, probe-rs, flip-link)
+
+Each line skips what's already installed.
+
+```bash
+command -v rustup >/dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+. "$HOME/.cargo/env"
+command -v cargo-binstall >/dev/null || curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+command -v probe-rs >/dev/null || cargo binstall -y probe-rs-tools
+command -v flip-link >/dev/null || cargo install flip-link
+```
+
 ## After applying
 
 ```bash
