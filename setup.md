@@ -312,6 +312,41 @@ cp /usr/share/omarchy/etc-overrides/dot.bashrc ~/.bashrc
 cat omarchy-setup/bashrc-append.sh >> ~/.bashrc
 ```
 
+## 24. VLC video doesn't inhibit sleep
+
+Same underlying issue as step 13, different mechanism: VLC's Arch build has
+no Wayland idle-inhibit plugin at all (only `dbus_screensaver` and `xdg`,
+checked via `vlc --list`), and it prefers the D-Bus one, calling
+`org.freedesktop.ScreenSaver` at object path `/ScreenSaver` (not
+`/org/freedesktop/ScreenSaver` — checked via `strings` on
+`libdbus_screensaver_plugin.so`). Nothing on Hyprland/omarchy owns that name,
+so VLC's own service probe (`cannot find service org.freedesktop.ScreenSaver`
+in `vlc -vv` logs) fails and it falls back to the `xdg` module, which no-ops
+under Hyprland too (no X screensaver, no gnome/mate session D-Bus service).
+
+Fix: a small D-Bus service that owns that name at that path and bridges
+Inhibit/UnInhibit to `omarchy-toggle-idle` (the same stay-awake override the
+idle service already respects), refcounted and cleaned up if the caller
+disconnects without calling UnInhibit. VLC only *probes* for an
+already-running owner — it never triggers on-demand D-Bus activation — so
+this has to run as a persistent service, not a D-Bus-activated one. Needs
+`python-dbus` and `python-gobject` (already present on a stock Omarchy
+install).
+
+```bash
+cp omarchy-setup/screensaver-inhibit-bridge.py ~/.local/bin/omarchy-screensaver-inhibit-bridge
+chmod +x ~/.local/bin/omarchy-screensaver-inhibit-bridge
+mkdir -p ~/.config/systemd/user
+cp omarchy-setup/omarchy-screensaver-inhibit-bridge.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now omarchy-screensaver-inhibit-bridge.service
+```
+
+Verify: play a video in VLC past the screensaver timeout, screen stays awake;
+`omarchy-shell idle status` shows `"stayAwake":true` while playing (also
+visible as `~/.local/state/omarchy/indicators/stay-awake` existing), reverts
+within a second of stopping/closing VLC.
+
 ## After applying
 
 ```bash

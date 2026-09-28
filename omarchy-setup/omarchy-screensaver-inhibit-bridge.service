@@ -1,0 +1,10 @@
+[Unit]
+Description=Bridge legacy org.freedesktop.ScreenSaver Inhibit calls into omarchy's idle override
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/omarchy-screensaver-inhibit-bridge
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target
