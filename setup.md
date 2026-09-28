@@ -29,8 +29,18 @@ Append `omarchy-setup/hyprsunset-profile.conf` to `~/.config/hypr/hyprsunset.con
 ```bash
 cat omarchy-setup/hyprland-env-append.lua >> ~/.config/hypr/hyprland.lua
 systemctl --user enable --now ssh-agent.socket
-bash omarchy-setup/keepassxc-hidpi.sh
 ```
+
+**Do not run `keepassxc-hidpi.sh`** (removed 2026-09-28). It forced
+`QT_SCALE_FACTOR=2` on KeePassXC's desktop entry to fix tiny rendering under
+XWayland, back when `qt5-wayland` wasn't installed. `qt5-wayland` is now
+installed, so KeePassXC renders natively on Wayland and already picks up
+Hyprland's compositor scale — the forced override double-scales the UI on
+top of that, desyncing click/focus coordinates from what's rendered, which
+broke keyboard input when launched from the app launcher (worked fine run
+directly from a terminal, which bypasses the desktop entry). If a future
+machine still lacks `qt5-wayland` and KeePassXC renders tiny again, redo the
+override then — don't apply it pre-emptively.
 
 Enable in KeePassXC: Tools → Settings → SSH Agent → Enable (vault under `~/sync/by_letter/P/`).
 Verify: `ssh-add -l` → `The agent has no identities.` (not a connection error).
