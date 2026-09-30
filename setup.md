@@ -401,6 +401,8 @@ command -v rustup >/dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.
 . "$HOME/.cargo/env"
 command -v cargo-binstall >/dev/null || curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 command -v probe-rs >/dev/null || cargo binstall -y probe-rs-tools
+command -v cargo nextest >/dev/null || cargo binstall -y cargo-nextest
+command -v cargo bloat >/dev/null || cargo binstall -y cargo-bloat
 command -v flip-link >/dev/null || cargo install flip-link
 ```
 
