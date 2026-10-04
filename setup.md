@@ -439,6 +439,26 @@ cat omarchy-setup/btop-background-autostart.lua >> ~/.config/hypr/autostart.lua
 setsid btop-background >/dev/null 2>&1 &   # start now without relogin
 ```
 
+## 30. sccache: compiled Rust dependencies shared across projects
+
+Pick per machine: `DIR` on the disk with the most free space (`df -h`; `~/.cache/sccache`
+if home has room), `SIZE` ≈ a quarter of that free space. Old entries are evicted at the limit.
+
+```bash
+omarchy pkg add sccache
+DIR=~/.cache/sccache SIZE=20G   # adjust
+mkdir -p "$DIR" ~/.config/sccache
+printf '[cache.disk]\ndir = "%s"\nsize = %s\n' "$DIR" "$(numfmt --from=iec "$SIZE")" > ~/.config/sccache/config
+# rustc-wrapper under [build] in ~/.cargo/config.toml, keeping existing keys
+grep -q '^rustc-wrapper' ~/.cargo/config.toml 2>/dev/null || {
+  grep -q '^\[build\]' ~/.cargo/config.toml 2>/dev/null \
+    && sed -i '/^\[build\]/a rustc-wrapper = "sccache"' ~/.cargo/config.toml \
+    || printf '[build]\nrustc-wrapper = "sccache"\n' >> ~/.cargo/config.toml; }
+sccache --stop-server 2>/dev/null; sccache --show-stats | grep -E 'Cache location|Max cache size'
+```
+
+Check reuse with `sccache --show-stats`; bypass once with `RUSTC_WRAPPER= cargo build`.
+
 ## After applying
 
 ```bash
