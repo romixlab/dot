@@ -406,6 +406,22 @@ command -v cargo bloat >/dev/null || cargo binstall -y cargo-bloat
 command -v flip-link >/dev/null || cargo install flip-link
 ```
 
+## 28. Show hostname in bash prompt
+
+Prompt is Starship (`~/.config/starship.toml`). Prepend `$hostname` to `format`
+and show it locally too, not only over SSH:
+
+```bash
+sed -i 's/^format = "\[\$directory/format = "[$hostname$directory/' ~/.config/starship.toml
+cat >> ~/.config/starship.toml <<'EOF'
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style) "
+style = "bold cyan"
+EOF
+```
+
 ## After applying
 
 ```bash
