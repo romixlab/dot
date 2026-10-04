@@ -427,6 +427,18 @@ style = "bold cyan"
 EOF
 ```
 
+## 29. btop as background on empty workspaces
+
+kitty background-layer panel running btop, shown/hidden by a Hyprland event
+listener (`omarchy-setup/btop-background`). Ghostty stays the default terminal.
+
+```bash
+omarchy pkg add kitty
+install -m755 omarchy-setup/btop-background ~/.local/bin/
+cat omarchy-setup/btop-background-autostart.lua >> ~/.config/hypr/autostart.lua
+setsid btop-background >/dev/null 2>&1 &   # start now without relogin
+```
+
 ## After applying
 
 ```bash

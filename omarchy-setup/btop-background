@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# btop as desktop background, shown only on empty workspaces.
+# kitty panel on the background layer + Hyprland event listener toggling it.
+
+sock="unix:$XDG_RUNTIME_DIR/btop-background.sock"
+
+# Keep clear of the bar: wait (up to 10s at login) for its reserved area.
+for _ in $(seq 20); do
+  read -r l t r b < <(hyprctl monitors -j | jq -r '.[0].reserved | @tsv')
+  [ $((l + t + r + b)) -gt 0 ] && break
+  sleep 0.5
+done
+
+kitten panel --edge=background --start-as-hidden \
+  --margin-left="$l" --margin-top="$t" --margin-right="$r" --margin-bottom="$b" \
+  -o allow_remote_control=socket-only --listen-on "$sock" btop &
+panel=$!
+trap 'kill $panel 2>/dev/null' EXIT
+sleep 1
+
+shown=
+update() {
+  local want=hide
+  [ "$(hyprctl activeworkspace -j | jq .windows)" = 0 ] && want=show
+  [ "$want" = "$shown" ] && return
+  kitten @ --to "$sock" resize-os-window --action="$want" && shown=$want
+}
+
+update
+socat -U - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" |
+  while read -r line; do
+    case $line in
+      workspace\>\>*|focusedmon\>\>*|openwindow\>\>*|closewindow\>\>*|movewindow\>\>*) update ;;
+    esac
+  done
