@@ -392,7 +392,7 @@ sudo udevadm trigger --subsystem-match=usb --subsystem-match=hidraw --subsystem-
 
 Verify: `getfacl /dev/bus/usb/*/* | grep "user:$USER"`.
 
-## 27. Rust embedded toolchain (rustup, cargo-binstall, probe-rs, flip-link)
+## 27. Rust toolchain (rustup, cargo-binstall, probe-rs, flip-link, cargo tools)
 
 Each line skips what's already installed.
 
@@ -401,8 +401,13 @@ command -v rustup >/dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.
 . "$HOME/.cargo/env"
 command -v cargo-binstall >/dev/null || curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 command -v probe-rs >/dev/null || cargo binstall -y probe-rs-tools
-command -v cargo nextest >/dev/null || cargo binstall -y cargo-nextest
-command -v cargo bloat >/dev/null || cargo binstall -y cargo-bloat
+command -v cargo-nextest >/dev/null || cargo binstall -y cargo-nextest
+command -v cargo-bloat >/dev/null || cargo binstall -y cargo-bloat
+command -v cargo-semver-checks >/dev/null || cargo binstall -y cargo-semver-checks
+command -v cargo-sort >/dev/null || cargo binstall -y cargo-sort
+command -v cargo-upgrades >/dev/null || cargo binstall -y cargo-upgrades
+command -v sqlx >/dev/null || cargo binstall -y sqlx-cli
+command -v typos >/dev/null || cargo binstall -y typos-cli
 command -v flip-link >/dev/null || cargo install flip-link
 ```
 
