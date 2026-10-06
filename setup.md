@@ -518,6 +518,21 @@ sudo install -m 755 -o root -g root omarchy-setup/bluetooth-bcm4377-sleep.sh \
 Manual fix without the hook: `sudo modprobe -r hci_bcm4377 && sudo modprobe hci_bcm4377`.
 Verify: suspend, wake, `bluetoothctl show` → `Powered: yes`, no tx timeouts in `journalctl -k -b`.
 
+## 35. USB hub doesn't miss replugged devices
+
+Only if the Terminus FE1.1 hub (`1a40:0101`) is used — `lsusb | grep 1a40:0101`.
+Autosuspended with nothing plugged in, it misses new connections (replugged keyboard
+stays dead until the hub is power-cycled). Keep it awake; add other bad hubs' ids to the rule.
+
+```bash
+sudo install -m 644 omarchy-setup/80-usb-hub-no-autosuspend.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=usb --action=add
+```
+
+Verify: `cat /sys/bus/usb/devices/1-1/power/control` → `on` (port path may differ: `lsusb -t`);
+unplug and replug the keyboard, it comes back.
+
 ## After applying
 
 ```bash

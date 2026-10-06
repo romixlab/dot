@@ -1,0 +1,4 @@
+# Keep the Terminus FE1.1 USB 2.0 hub (1a40:0101) awake. Autosuspended with
+# nothing plugged in, it misses new connections: a replugged keyboard stays
+# dead until the whole hub is power-cycled.
+ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="1a40", ATTR{idProduct}=="0101", TEST=="power/control", ATTR{power/control}="on"
