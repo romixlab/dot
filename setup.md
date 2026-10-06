@@ -475,7 +475,7 @@ python3 -c "import socket; print(socket.getaddrinfo(\"chatgpt.com\", 443, socket
 
 ## 32. Russian layout via keyd (MacBook keyboard + Ergodox)
 
-Standard PC ЙЦУКЕН positions, Alt+Space toggles en/ru. Files in [`keyd_mac/`](keyd_mac/).
+Standard PC ЙЦУКЕН positions, Alt+Space toggles en/ru, Esc (Mac: Caps Lock) in ru → en. Files in [`keyd_mac/`](keyd_mac/).
 `mac.conf` matches the built-in Apple keyboard by full id (trackpad shares `05ac:0343`) —
 check with `keyd monitor` on a new machine.
 

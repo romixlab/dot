@@ -9,4 +9,6 @@ keyd Russian layout, standard PC ЙЦУКЕН positions (ё on `` ` ``, х ъ on
 
 Keys mapped in `[main]` override the ru layout, so English-only remaps go in `[en:layout]` (the default layout).
 
+Esc (Caps Lock on the Mac keyboard) in ru switches to en without sending Escape — press it before typing the lock-screen password.
+
 Layout state is per keyboard: toggle on each separately.
