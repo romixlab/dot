@@ -503,6 +503,21 @@ yay -S --needed ttf-dejavu ttf-carlito ttf-caladea ttf-croscore tex-gyre-fonts t
   ttf-gost ttf-paratype ttf-ms-fonts
 ```
 
+## 34. Bluetooth survives suspend (Apple Silicon)
+
+Only on machines with the `hci_bcm4377` driver (Asahi, e.g. this M1 laptop) — check
+`lsmod | grep hci_bcm4377` first. Without it Bluetooth is dead after resume
+(`hci0: command 0x0c01 tx timeout` in `journalctl -k`). The sleep hook unloads the
+driver before suspend and loads it again on wake.
+
+```bash
+sudo install -m 755 -o root -g root omarchy-setup/bluetooth-bcm4377-sleep.sh \
+  /etc/systemd/system-sleep/bluetooth-bcm4377.sh
+```
+
+Manual fix without the hook: `sudo modprobe -r hci_bcm4377 && sudo modprobe hci_bcm4377`.
+Verify: suspend, wake, `bluetoothctl show` → `Powered: yes`, no tx timeouts in `journalctl -k -b`.
+
 ## After applying
 
 ```bash
