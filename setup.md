@@ -459,6 +459,20 @@ sccache --stop-server 2>/dev/null; sccache --show-stats | grep -E 'Cache locatio
 
 Check reuse with `sccache --show-stats`; bypass once with `RUSTC_WRAPPER= cargo build`.
 
+## 31. Public DNS instead of the home router
+
+The home router (192.168.0.1, Compal) answers IPv6 (AAAA) lookups with NOTIMP; static Rust binaries
+(Codex) then fail every connection. Each home connection (wired and wifi) uses Quad9 + Cloudflare;
+Tailscale MagicDNS stays.
+
+```bash
+for c in $(nmcli -g NAME,TYPE con show | grep -E "ethernet|wireless" | cut -d: -f1); do
+  sudo nmcli con mod "$c" ipv4.ignore-auto-dns yes ipv4.dns "9.9.9.9 1.1.1.1" ipv6.ignore-auto-dns yes
+done
+for d in $(nmcli -g DEVICE,TYPE dev | grep -E "ethernet|wifi" | cut -d: -f1); do sudo nmcli dev reapply "$d"; done
+python3 -c "import socket; print(socket.getaddrinfo(\"chatgpt.com\", 443, socket.AF_INET6)[0][4])"
+```
+
 ## After applying
 
 ```bash
