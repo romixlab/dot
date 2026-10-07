@@ -550,6 +550,18 @@ sudo systemctl daemon-reload && sudo systemctl enable --now gpd-fan-curve.servic
 Verify: `gpd-fan-curve status` → `mode manual`, fan 0 rpm when idle and cool. Tune with `--curve` / `--off-below`
 in the unit's `ExecStart`. Undo: `sudo systemctl disable --now gpd-fan-curve` (EC auto again).
 
+## 37. Cargo tools on PATH for ssh commands
+
+`ssh host 'cargo ...'` (also `tpm`, `tpm_mesh_dash`, remote `tpm work spawn --on`) reads no `~/.bashrc` on
+Arch; the PATH comes from the `PATH DEFAULT=` line Omarchy adds to `/etc/security/pam_env.conf`
+(`install/config/ssh-command-path.sh`, only if missing, so the edit stays). Add `~/.cargo/bin` to it:
+
+```bash
+sudo sed -i '/^PATH DEFAULT=/{/cargo\/bin/b;s|$|:@{HOME}/.cargo/bin|}' /etc/security/pam_env.conf
+```
+
+Verify from another PC: `ssh <host> 'command -v cargo'`. A pam update may leave a `.pacnew`; keep ours.
+
 ## After applying
 
 ```bash
