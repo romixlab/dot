@@ -543,7 +543,7 @@ gives control back to the EC when stopped.
 cargo build --release --manifest-path gpd-fan-curve/Cargo.toml
 sudo install -m 755 gpd-fan-curve/target/release/gpd-fan-curve /usr/local/bin/
 sudo install -m 644 gpd-fan-curve/gpd-fan-curve.service /etc/systemd/system/
-sudo install -m 755 gpd-fan-curve/gpd-fan-curve-sleep.sh /etc/systemd/system-sleep/gpd-fan-curve.sh
+sudo install -Dm 755 gpd-fan-curve/gpd-fan-curve-sleep.sh /etc/systemd/system-sleep/gpd-fan-curve.sh
 sudo systemctl daemon-reload && sudo systemctl enable --now gpd-fan-curve.service
 ```
 
