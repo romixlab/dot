@@ -1,0 +1,9 @@
+[package]
+name = "gpd-fan-curve"
+version = "0.1.0"
+edition = "2024"
+description = "Quiet fan curve for GPD devices on the gpd-fan hwmon driver"
+
+[dependencies]
+clap = { version = "4.6", features = ["derive"] }
+clap_complete = "4.6"

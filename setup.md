@@ -533,6 +533,23 @@ sudo udevadm trigger --subsystem-match=usb --action=add
 Verify: `cat /sys/bus/usb/devices/1-1/power/control` → `on` (port path may differ: `lsusb -t`);
 unplug and replug the keyboard, it comes back.
 
+## 36. Quiet fan curve (GPD)
+
+Only on GPD devices with the `gpd_fan` driver — `grep -l gpdfan /sys/class/hwmon/*/name`. The EC never stops
+the fan (≈2400 rpm at 36 °C idle); `gpd-fan-curve` runs it in manual mode: off below 48 °C, ramps 55→85 °C,
+gives control back to the EC when stopped.
+
+```bash
+cargo build --release --manifest-path gpd-fan-curve/Cargo.toml
+sudo install -m 755 gpd-fan-curve/target/release/gpd-fan-curve /usr/local/bin/
+sudo install -m 644 gpd-fan-curve/gpd-fan-curve.service /etc/systemd/system/
+sudo install -m 755 gpd-fan-curve/gpd-fan-curve-sleep.sh /etc/systemd/system-sleep/gpd-fan-curve.sh
+sudo systemctl daemon-reload && sudo systemctl enable --now gpd-fan-curve.service
+```
+
+Verify: `gpd-fan-curve status` → `mode manual`, fan 0 rpm when idle and cool. Tune with `--curve` / `--off-below`
+in the unit's `ExecStart`. Undo: `sudo systemctl disable --now gpd-fan-curve` (EC auto again).
+
 ## After applying
 
 ```bash

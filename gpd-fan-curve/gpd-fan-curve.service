@@ -1,0 +1,13 @@
+[Unit]
+Description=Quiet fan curve for the GPD (gpd_fan manual mode)
+After=systemd-modules-load.service
+
+[Service]
+ExecStart=/usr/local/bin/gpd-fan-curve run
+# The tool hands the fan back to the EC on SIGTERM; this covers a crash too
+ExecStopPost=/bin/sh -c 'for h in /sys/class/hwmon/hwmon*; do [ "$(cat $h/name)" = gpdfan ] && echo 2 > $h/pwm1_enable; done'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
