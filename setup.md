@@ -562,6 +562,25 @@ sudo sed -i '/^PATH DEFAULT=/{/cargo\/bin/b;s|$|:@{HOME}/.cargo/bin|}' /etc/secu
 
 Verify from another PC: `ssh <host> 'command -v cargo'`. A pam update may leave a `.pacnew`; keep ours.
 
+## 38. Keep running: lid close doesn't sleep
+
+Laptops only. A bar indicator next to Stay Awake (󰒲, revealed on hover like the others) holds a logind
+`handle-lid-switch` inhibitor while on, so closing the lid locks but doesn't suspend. Idle stays as is:
+screensaver → lock with password → screen off (idle never suspends). Explicit suspend (power menu,
+Escape on the lock screen) still works. State persists in `~/.local/state/omarchy/indicators/keep-running`.
+Clones of `omarchy.idle` (holds the inhibitor) and `omarchy.indicators` (adds `KeepRunning`).
+
+```bash
+cp -r omarchy-setup/roman.idle omarchy-setup/roman.indicators ~/.config/omarchy/plugins/
+```
+
+Merges into `~/.config/omarchy/shell.json` (already in step 7's file): `"roman.idle"` in `plugins` and
+`cloneSourceRestores`, `"omarchy.idle"` in `disabledPlugins`, `omarchy.indicators` → `roman.indicators`
+in the bar layout. Then `omarchy restart shell` (services don't hot-reload).
+
+Verify: click 󰒲, `systemd-inhibit --list` shows "Omarchy keep running"; `omarchy-shell idle status`
+→ `"keepRunning":true,"lidInhibited":true`.
+
 ## After applying
 
 ```bash

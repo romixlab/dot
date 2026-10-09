@@ -3,40 +3,84 @@
     "centerAnchor": "omarchy.clock",
     "layout": {
       "center": [
-        { "id": "omarchy.indicators" },
+        {
+          "id": "roman.indicators"
+        },
         {
           "id": "omarchy.clock",
           "birthYear": 1995,
           "format": "ddd d MMM HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
           "lifeExpectancy": 90,
-          "verticalFormat": "HH\n—\nmm"
+          "verticalFormat": "HH\n\u2014\nmm"
         },
-        { "id": "omarchy.keyboard-layout" },
-        { "id": "omarchy.weather" },
-        { "id": "omarchy.system-update" }
+        {
+          "id": "omarchy.keyboard-layout"
+        },
+        {
+          "id": "omarchy.weather"
+        },
+        {
+          "id": "omarchy.system-update"
+        }
       ],
       "left": [
-        { "id": "omarchy.menu" },
-        { "id": "roman.workspaces" }
+        {
+          "id": "omarchy.menu"
+        },
+        {
+          "id": "roman.workspaces"
+        }
       ],
       "right": [
-        { "id": "omarchy.tray" },
-        { "id": "omarchy.tailscale" },
-        { "id": "omarchy.agents" },
-        { "id": "omarchy.bluetooth" },
-        { "id": "omarchy.network" },
-        { "id": "omarchy.audio" },
-        { "id": "roman.monitor" },
-        { "id": "omarchy.power" }
+        {
+          "id": "omarchy.tray"
+        },
+        {
+          "id": "omarchy.tailscale"
+        },
+        {
+          "id": "omarchy.agents"
+        },
+        {
+          "id": "omarchy.bluetooth"
+        },
+        {
+          "id": "omarchy.network"
+        },
+        {
+          "id": "omarchy.audio"
+        },
+        {
+          "id": "roman.monitor"
+        },
+        {
+          "id": "omarchy.power"
+        }
       ]
     },
     "position": "top",
     "transparent": false
   },
-  "idle": { "lock": 600, "screensaver": 300 },
-  "plugins": [{ "id": "roman.lock" }],
+  "idle": {
+    "lock": 600,
+    "screensaver": 300
+  },
+  "plugins": [
+    {
+      "id": "roman.lock"
+    },
+    {
+      "id": "roman.idle"
+    }
+  ],
   "version": 1,
-  "disabledPlugins": ["omarchy.lock"],
-  "cloneSourceRestores": ["roman.lock"]
+  "disabledPlugins": [
+    "omarchy.lock",
+    "omarchy.idle"
+  ],
+  "cloneSourceRestores": [
+    "roman.lock",
+    "roman.idle"
+  ]
 }
