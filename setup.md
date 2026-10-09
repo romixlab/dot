@@ -604,7 +604,7 @@ Each machine gets its own prompt colour so shells are never mixed up; prod serve
 | Machine          | Prompt                     | Colour                  |
 |------------------|----------------------------|-------------------------|
 | omarchy-m1       | Starship                   | `cyan`                  |
-| gpd-omarchy      | Starship                   | `magenta`               |
+| gpd-omarchy      | Starship                   | `purple`                |
 | mail.vhrd.tech   | bash, prod                 | white on red            |
 | vhrd.tech (web)  | bash, prod                 | black on orange         |
 | PVE, PVE2, mx3   | -                          | blue (not applied yet)  |
@@ -612,7 +612,8 @@ Each machine gets its own prompt colour so shells are never mixed up; prod serve
 Omarchy PCs (step 28 first): recolour the whole Starship prompt.
 
 ```bash
-sed -i 's/cyan/magenta/g' ~/.config/starship.toml   # colour from the table
+C=purple   # from the table; Starship names: black red green blue yellow purple cyan white
+sed -i "s/cyan/$C/g; /^\[directory\]/a style = \"bold $C\"" ~/.config/starship.toml
 ```
 
 Servers: append a PS1 to `~/.bashrc` (overrides the Debian default above it).
