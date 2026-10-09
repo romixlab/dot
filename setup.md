@@ -599,32 +599,55 @@ Verify: `cargo build` in a worktree under `/tmp/wt` leaves only the binaries in 
 
 ## 40. Prompt colour per machine
 
-Each machine gets its own prompt colour so shells are never mixed up; prod servers get a coloured block.
+Every machine gets a distinct prompt colour plus an icon for its kind, so shells are never mixed up. Each kind
+has its own palette: a new machine takes the first free entry of its kind and gets a row in the assignments.
+A retired machine's entry becomes free again. Work PCs colour the text; every other kind gets a coloured block
+around the host name.
 
-| Machine          | Prompt                     | Colour                  |
-|------------------|----------------------------|-------------------------|
-| omarchy-m1       | Starship                   | `cyan`                  |
-| gpd-omarchy      | Starship                   | `purple`                |
-| mail.vhrd.tech   | bash, prod                 | white on red            |
-| vhrd.tech (web)  | bash, prod                 | black on orange         |
-| PVE, PVE2, mx3   | -                          | blue (not applied yet)  |
+Kinds, icons and palettes (block entries are SGR codes: `fg;bg`, 256-colour where needed):
 
-Omarchy PCs (step 28 first): recolour the whole Starship prompt.
+- **work** 💻 (Starship, text colour): `cyan` · `purple` · `green` · `blue` · `208` (orange) · `205` (pink)
+- **prod** 🔥 (warm block): `97;41` white on red · `30;48;5;208` black on orange · `97;48;5;125` white on wine ·
+  `97;48;5;161` white on raspberry
+- **lab** 🧪 (servers, VMs, Proxmox; blue block): `97;44` white on blue · `97;48;5;31` white on teal ·
+  `97;48;5;61` white on slate · `97;48;5;24` white on navy
+- **sbc** 🍓 (Raspberry Pi and other boards; green block): `97;42` white on green · `30;48;5;114` black on mint ·
+  `97;48;5;29` white on sea green · `30;48;5;148` black on lime
+- **printer** 🧵 (3D printer hosts, Klipper; yellow block): `30;43` black on yellow · `30;48;5;222` black on sand ·
+  `97;48;5;130` white on brown · `30;48;5;178` black on gold
+
+Icons are single-codepoint emoji (no `U+FE0F` variation selector), so bash counts their width right.
+
+Assignments:
+
+| Machine          | Kind    | Entry                    |
+|------------------|---------|--------------------------|
+| omarchy-m1       | work    | `cyan`                   |
+| gpd-omarchy      | work    | `purple`                 |
+| mail.vhrd.tech   | prod    | `97;41` white on red     |
+| vhrd.tech (web)  | prod    | `30;48;5;208` on orange  |
+| omarchy-pve      | lab     | `97;44` (not applied)    |
+| mx3 (VM)         | lab     | `97;48;5;31` (not appl.) |
+
+Work PCs (Starship, step 28 first): recolour the whole prompt and put the icon before the host name.
 
 ```bash
-C=purple   # from the table; Starship names: black red green blue yellow purple cyan white
+C=purple   # Starship names: black red green blue yellow purple cyan white, or a 256-colour number
 sed -i "s/cyan/$C/g; /^\[directory\]/a style = \"bold $C\"" ~/.config/starship.toml
+sed -i '/^\[hostname\]/,/^format/s/^format = "\[/format = "💻 [/' ~/.config/starship.toml
 ```
 
-Servers: append a PS1 to `~/.bashrc` (overrides the Debian default above it).
+Other kinds (bash): append a PS1 to `~/.bashrc` (overrides the distro default above it).
 
 ```bash
-# mail.vhrd.tech: '1;97;41'   vhrd.tech: '1;30;48;5;208'
 grep -q 'dot step 40' ~/.bashrc || cat >> ~/.bashrc <<'EOF'
 # prompt colour per machine (dot step 40)
-PS1='\[\e[1;97;41m\] \H \[\e[0m\] \u:\[\e[1;34m\]\w\[\e[0m\]\$ '
+PS1='\[\e[1;97;41m\] 🔥 \H \[\e[0m\] \u:\[\e[1;34m\]\w\[\e[0m\]\$ '
 EOF
 ```
+
+Swap in the entry's SGR code (after `1;`) and the kind's icon. Already applied without an icon: add it with
+`sed -i '/dot step 40/{n;s/m\\] \\H/m\\] 🔥 \\H/}' ~/.bashrc`.
 
 ## After applying
 
