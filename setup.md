@@ -581,6 +581,22 @@ in the bar layout. Then `omarchy restart shell` (services don't hot-reload).
 Verify: click 󰒲, `systemd-inhibit --list` shows "Omarchy keep running"; `omarchy-shell idle status`
 → `"keepRunning":true,"lidInhibited":true`.
 
+## 39. Cargo build-dir on disk, not in /tmp
+
+Session worktrees live in `/tmp/wt` (RAM tmpfs); two mx3 builds filled 16 GB there (9 Oct 2026). Cargo's
+intermediates go to a disk path per workspace, final binaries stay in `./target`; `tpm work done` and `tpm land`
+remove a worktree's build-dir (HK-6). Pick the disk with the most room (GPD: `/mnt/data/omarchy/cargo-build`).
+
+```bash
+DIR=~/.cache/cargo-build   # adjust
+grep -q '^build-dir' ~/.cargo/config.toml 2>/dev/null || {
+  grep -q '^\[build\]' ~/.cargo/config.toml 2>/dev/null \
+    && sed -i "/^\[build\]/a build-dir = \"$DIR/{workspace-path-hash}\"" ~/.cargo/config.toml \
+    || printf '[build]\nbuild-dir = "%s/{workspace-path-hash}"\n' "$DIR" >> ~/.cargo/config.toml; }
+```
+
+Verify: `cargo build` in a worktree under `/tmp/wt` leaves only the binaries in its `target/`.
+
 ## After applying
 
 ```bash
