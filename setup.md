@@ -597,6 +597,34 @@ grep -q '^build-dir' ~/.cargo/config.toml 2>/dev/null || {
 
 Verify: `cargo build` in a worktree under `/tmp/wt` leaves only the binaries in its `target/`.
 
+## 40. Prompt colour per machine
+
+Each machine gets its own prompt colour so shells are never mixed up; prod servers get a coloured block.
+
+| Machine          | Prompt                     | Colour                  |
+|------------------|----------------------------|-------------------------|
+| omarchy-m1       | Starship                   | `cyan`                  |
+| gpd-omarchy      | Starship                   | `magenta`               |
+| mail.vhrd.tech   | bash, prod                 | white on red            |
+| vhrd.tech (web)  | bash, prod                 | black on orange         |
+| PVE, PVE2, mx3   | -                          | blue (not applied yet)  |
+
+Omarchy PCs (step 28 first): recolour the whole Starship prompt.
+
+```bash
+sed -i 's/cyan/magenta/g' ~/.config/starship.toml   # colour from the table
+```
+
+Servers: append a PS1 to `~/.bashrc` (overrides the Debian default above it).
+
+```bash
+# mail.vhrd.tech: '1;97;41'   vhrd.tech: '1;30;48;5;208'
+grep -q 'dot step 40' ~/.bashrc || cat >> ~/.bashrc <<'EOF'
+# prompt colour per machine (dot step 40)
+PS1='\[\e[1;97;41m\] \H \[\e[0m\] \u:\[\e[1;34m\]\w\[\e[0m\]\$ '
+EOF
+```
+
 ## After applying
 
 ```bash
