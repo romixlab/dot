@@ -473,20 +473,23 @@ for d in $(nmcli -g DEVICE,TYPE dev | grep -E "ethernet|wifi" | cut -d: -f1); do
 python3 -c "import socket; print(socket.getaddrinfo(\"chatgpt.com\", 443, socket.AF_INET6)[0][4])"
 ```
 
-## 32. Russian layout via keyd (MacBook keyboard + Ergodox)
+## 32. Russian layout: XKB us,ru switched by keyd (MacBook keyboard + Ergodox)
 
-Standard PC ЙЦУКЕН positions, Alt+Space toggles en/ru, Esc (Mac: Caps Lock) in ru → en. Files in [`keyd_mac/`](keyd_mac/).
+Russian is a real XKB layout (no compose sequences); keyd tracks the mode and picks the XKB group.
+Alt+Space toggles en/ru, Esc (Mac: Caps Lock) in ru → en. Files in [`keyd_mac/`](keyd_mac/).
 `mac.conf` matches the built-in Apple keyboard by full id (trackpad shares `05ac:0343`) —
 check with `keyd monitor` on a new machine.
 
 ```bash
+cat keyd_mac/hypr-input.lua >> ~/.config/hypr/input.lua
+hyprctl reload && hyprctl configerrors
 sudo rm -f /etc/keyd/default.conf /etc/keyd/ru_std
 sudo cp keyd_mac/mac.conf keyd_mac/ergodox.conf keyd_mac/ru /etc/keyd/
 sudo keyd reload
-mkdir -p ~/.config/keyd && cp keyd_mac/ru.compose ~/.config/keyd/
-printf '\n# keyd Russian layout\ninclude "%%H/.config/keyd/ru.compose"\n' >> ~/.XCompose
-omarchy-restart-xcompose   # then restart open apps
 ```
+
+Coming from the old compose-based version: drop the `ru.compose` include from `~/.XCompose`,
+remove `~/.config/keyd/ru.compose`, `omarchy-restart-xcompose`.
 
 ## 33. Extra fonts (docs, Typst, Russian/GOST documents)
 
