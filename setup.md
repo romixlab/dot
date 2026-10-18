@@ -653,6 +653,24 @@ EOF
 Swap in the entry's SGR code (after `1;`) and the kind's icon. Already applied without an icon: add it with
 `sed -i '/dot step 40/{n;s/m\\] \\H/m\\] 🔥 \\H/}' ~/.bashrc`.
 
+## 41. Screensaver: random art per round (Linux, Arch, Asahi, Apple, VhrdTech)
+
+Each effect picks a random file: the stock `screensaver.txt` plus any `screensaver-*.txt`.
+Patches a package file like step 17 (both patches apply in either order); reapply after Omarchy updates.
+
+```bash
+cp omarchy-setup/screensaver/screensaver-*.txt ~/.config/omarchy/branding/
+sudo patch /usr/bin/omarchy-screensaver < omarchy-setup/omarchy-screensaver-random-art.patch
+```
+
+Sources are the SVGs next to the art (fonts: Audiowide from step 33, JetBrainsMono Nerd Font). After editing one:
+
+```bash
+omarchy transcode ascii omarchy-setup/screensaver/arch.svg omarchy-setup/screensaver/screensaver-arch.txt --width 84 --height 30 --mode block
+```
+
+On a narrow-terminal machine (step 21) lower `--width` to fit.
+
 ## After applying
 
 ```bash

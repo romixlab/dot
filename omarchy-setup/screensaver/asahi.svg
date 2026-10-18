@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="900">
+  <!-- Rising sun (asahi = morning sun) -->
+  <clipPath id="sky"><rect x="-500" y="-500" width="1000" height="500"/></clipPath>
+  <g transform="translate(1300,470)">
+    <g clip-path="url(#sky)">
+      <circle r="170"/>
+      <g stroke="black" stroke-width="44" stroke-linecap="round">
+        <line y1="-240" y2="-400" transform="rotate(-90)"/>
+        <line y1="-240" y2="-400" transform="rotate(-60)"/>
+        <line y1="-240" y2="-400" transform="rotate(-30)"/>
+        <line y1="-240" y2="-400" transform="rotate(0)"/>
+        <line y1="-240" y2="-400" transform="rotate(30)"/>
+        <line y1="-240" y2="-400" transform="rotate(60)"/>
+        <line y1="-240" y2="-400" transform="rotate(90)"/>
+      </g>
+    </g>
+    <rect x="-440" y="-12" width="880" height="44" rx="22"/>
+  </g>
+  <text x="1300" y="860" text-anchor="middle" font-family="Audiowide" font-size="300" stroke="black" stroke-width="14" letter-spacing="20">Asahi</text>
+</svg>
