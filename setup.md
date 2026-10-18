@@ -494,7 +494,7 @@ remove `~/.config/keyd/ru.compose`, `omarchy-restart-xcompose`.
 ## 33. Extra fonts (docs, Typst, Russian/GOST documents)
 
 Text fonts for reports and datasheets, Office metric twins so Word exports keep their layout, PT and
-GOST 2.304-81 type A/B for Russian engineering documents. Ghostscript comes with Omarchy.
+GOST 2.304-81 type A/B for Russian engineering documents, Audiowide for logos and headings. Ghostscript comes with Omarchy.
 Astra Serif/Sans (AUR) are skipped: their source, webfonts.ru, was down (6 Oct 2026). Candidates and licences:
 vhrd_brand `logo/fonts.md`.
 
@@ -503,7 +503,7 @@ yay -S --needed ttf-dejavu ttf-carlito ttf-caladea ttf-croscore tex-gyre-fonts t
   ttf-roboto ttf-roboto-mono ttf-opensans ttf-fira-sans ttf-fira-code ttf-lato otf-montserrat \
   adobe-source-sans-fonts adobe-source-serif-fonts adobe-source-code-pro-fonts otf-libertinus \
   otf-crimson-pro ttf-ubuntu-font-family otf-atkinson-hyperlegible ttf-gentium-plus \
-  ttf-gost ttf-paratype ttf-ms-fonts
+  ttf-gost ttf-paratype ttf-ms-fonts audiowide-font
 ```
 
 ## 34. Bluetooth survives suspend (Apple Silicon)
