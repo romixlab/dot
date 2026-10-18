@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="900">
+  <!-- Two wires woven over and under each other -->
+  <g transform="translate(1300,300)" fill="none" stroke="black" stroke-width="50" stroke-linecap="round">
+    <path d="M-600 0 C-450 -200 -300 -200 -150 0 S150 200 300 0 S450 -200 600 0"/>
+    <g transform="scale(1,-1)"><path d="M-600 0 C-450 -200 -300 -200 -150 0 S150 200 300 0 S450 -200 600 0"/></g>
+    <circle cx="-600" r="40" fill="black"/>
+    <circle cx="600" r="40" fill="black"/>
+  </g>
+  <text x="1300" y="860" text-anchor="middle" font-family="JetBrainsMono Nerd Font" font-size="300" font-weight="800" stroke="black" stroke-width="22">wire_weaver</text>
+</svg>

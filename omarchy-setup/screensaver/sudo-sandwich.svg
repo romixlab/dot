@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1200">
+  <text x="200" y="330" text-anchor="start" font-family="JetBrainsMono Nerd Font" font-size="300" font-weight="800" stroke="black" stroke-width="22" xml:space="preserve">$ sudo</text>
+  <text x="200" y="720" text-anchor="start" font-family="JetBrainsMono Nerd Font" font-size="300" font-weight="800" stroke="black" stroke-width="22" xml:space="preserve">make me a</text>
+  <text x="200" y="1110" text-anchor="start" font-family="JetBrainsMono Nerd Font" font-size="300" font-weight="800" stroke="black" stroke-width="22" xml:space="preserve">sandwich</text>
+  <rect x="1680" y="900" width="150" height="250"/>
+</svg>

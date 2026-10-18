@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="900">
+  <!-- Clock face with arrow (async executor) -->
+  <g transform="translate(1300,300)" fill="none" stroke="black" stroke-linecap="round">
+    <circle r="220" stroke-width="50"/>
+    <line y2="-150" stroke-width="50"/>
+    <line x2="110" y2="60" stroke-width="50"/>
+    <path d="M200 -330 A330 330 0 0 1 330 -150" stroke-width="44"/>
+    <path d="M330 -150 L250 -170 M330 -150 L350 -230" stroke-width="44"/>
+  </g>
+  <text x="1300" y="860" text-anchor="middle" font-family="Audiowide" font-size="300" stroke="black" stroke-width="14" letter-spacing="20">Embassy</text>
+</svg>

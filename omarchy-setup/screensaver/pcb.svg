@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1060">
+  <!-- QFP chip with traces fanning out to vias -->
+  <g transform="translate(1300,360)">
+    <rect x="-150" y="-150" width="300" height="300" rx="20"/>
+    <g fill="none" stroke="black" stroke-width="34" stroke-linejoin="round">
+      <path d="M-150 -90 H-330 L-420 -180 H-700"/>
+      <path d="M-150 0 H-760"/>
+      <path d="M-150 90 H-330 L-420 180 H-700"/>
+      <path d="M150 -90 H330 L420 -180 H700"/>
+      <path d="M150 0 H760"/>
+      <path d="M150 90 H330 L420 180 H700"/>
+      <path d="M-60 -150 V-270"/>
+      <path d="M60 -150 V-270"/>
+      <path d="M-60 150 V270"/>
+      <path d="M60 150 V270"/>
+    </g>
+    <g fill="none" stroke="black" stroke-width="34">
+      <circle cx="-740" cy="-180" r="44"/><circle cx="-800" r="44"/><circle cx="-740" cy="180" r="44"/>
+      <circle cx="740" cy="-180" r="44"/><circle cx="800" r="44"/><circle cx="740" cy="180" r="44"/>
+      <circle cx="-60" cy="-310" r="44"/><circle cx="60" cy="-310" r="44"/>
+      <circle cx="-60" cy="310" r="44"/><circle cx="60" cy="310" r="44"/>
+    </g>
+  </g>
+  <text x="1300" y="1020" text-anchor="middle" font-family="Audiowide" font-size="300" stroke="black" stroke-width="14" letter-spacing="20">Ship it!</text>
+</svg>

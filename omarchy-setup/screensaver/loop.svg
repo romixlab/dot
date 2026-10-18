@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="800">
+  <!-- An MCU idles: C and Rust -->
+  <text x="1300" y="330" text-anchor="middle" font-family="JetBrainsMono Nerd Font" font-size="300" font-weight="800" stroke="black" stroke-width="22" xml:space="preserve">while(1);</text>
+  <text x="1300" y="720" text-anchor="middle" font-family="JetBrainsMono Nerd Font" font-size="300" font-weight="800" stroke="black" stroke-width="22" xml:space="preserve">loop {}</text>
+</svg>

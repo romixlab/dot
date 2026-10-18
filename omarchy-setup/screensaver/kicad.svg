@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="900">
+  <!-- Nerd Font glyph U+F34C kicad -->
+  <text x="1300" y="500" text-anchor="middle" font-family="JetBrainsMono Nerd Font" font-size="480"></text>
+  <text x="1300" y="860" text-anchor="middle" font-family="Audiowide" font-size="300" stroke="black" stroke-width="14" letter-spacing="20">KiCad</text>
+</svg>

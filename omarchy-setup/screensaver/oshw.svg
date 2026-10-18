@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1000">
+  <!-- Open source hardware gear: ring with teeth and a notch at the bottom -->
+  <mask id="gear">
+    <rect x="-400" y="-400" width="800" height="800" fill="white"/>
+    <circle r="100" fill="black"/>
+    <path d="M0 0 L-90 400 L90 400 Z" fill="black"/>
+  </mask>
+  <g transform="translate(1300,330) scale(1.3)" mask="url(#gear)">
+    <circle r="210"/>
+    <g>
+      <rect x="-45" y="-280" width="90" height="120" rx="10" transform="rotate(0)"/>
+      <rect x="-45" y="-280" width="90" height="120" rx="10" transform="rotate(45)"/>
+      <rect x="-45" y="-280" width="90" height="120" rx="10" transform="rotate(90)"/>
+      <rect x="-45" y="-280" width="90" height="120" rx="10" transform="rotate(135)"/>
+      <rect x="-45" y="-280" width="90" height="120" rx="10" transform="rotate(225)"/>
+      <rect x="-45" y="-280" width="90" height="120" rx="10" transform="rotate(270)"/>
+      <rect x="-45" y="-280" width="90" height="120" rx="10" transform="rotate(315)"/>
+    </g>
+  </g>
+  <text x="1300" y="960" text-anchor="middle" font-family="Audiowide" font-size="300" stroke="black" stroke-width="14" letter-spacing="20">Open HW</text>
+</svg>

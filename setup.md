@@ -653,9 +653,11 @@ EOF
 Swap in the entry's SGR code (after `1;`) and the kind's icon. Already applied without an icon: add it with
 `sed -i '/dot step 40/{n;s/m\\] \\H/m\\] 🔥 \\H/}' ~/.bashrc`.
 
-## 41. Screensaver: random art per round (Linux, Arch, Asahi, Apple, VhrdTech)
+## 41. Screensaver: random art per round
 
-Each effect picks a random file: the stock `screensaver.txt` plus any `screensaver-*.txt`.
+Each effect picks a random file: the stock `screensaver.txt` plus any `screensaver-*.txt` (tech logos and words:
+Linux, Arch, Asahi, Apple, VhrdTech, Rust, RISC-V, KiCad, Open HW, Hyprland, Wayland, Neovim, Embassy,
+wire_weaver, 0xDEADBEEF, 0xC0FFEE, `while(1);`/`loop {}`, sudo sandwich, PCB "Ship it!").
 Patches a package file like step 17 (both patches apply in either order); reapply after Omarchy updates.
 
 ```bash
