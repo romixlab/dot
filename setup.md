@@ -523,9 +523,10 @@ Verify: suspend, wake, `bluetoothctl show` → `Powered: yes`, no tx timeouts in
 
 ## 35. USB hub doesn't miss replugged devices
 
-Only if the Terminus FE1.1 hub (`1a40:0101`) is used — `lsusb | grep 1a40:0101`.
-Autosuspended with nothing plugged in, it misses new connections (replugged keyboard
-stays dead until the hub is power-cycled). Keep it awake; add other bad hubs' ids to the rule.
+Only if a Terminus FE1.1 (`1a40:0101`) or Genesys USB 3.2 (`05e3:0625`/`0610`) hub is used —
+`lsusb | grep -E '1a40:0101|05e3:06(25|10)'`.
+Autosuspended with nothing plugged in, they miss new connections (replugged device
+stays dead until the hub is power-cycled). Keep them awake; add other bad hubs' ids to the rule.
 
 ```bash
 sudo install -m 644 omarchy-setup/80-usb-hub-no-autosuspend.rules /etc/udev/rules.d/
@@ -533,7 +534,7 @@ sudo udevadm control --reload-rules
 sudo udevadm trigger --subsystem-match=usb --action=add
 ```
 
-Verify: `cat /sys/bus/usb/devices/1-1/power/control` → `on` (port path may differ: `lsusb -t`);
+Verify: `cat /sys/bus/usb/devices/*/power/control` of each hub → `on` (paths: `lsusb -t`);
 unplug and replug the keyboard, it comes back.
 
 ## 36. Quiet fan curve (GPD)
