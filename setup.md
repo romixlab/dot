@@ -673,6 +673,22 @@ omarchy transcode ascii omarchy-setup/screensaver/arch.svg omarchy-setup/screens
 
 On a narrow-terminal machine (step 21) lower `--width` to fit.
 
+## 43. Shell colours under Qt 6.12
+
+Qt 6.12's QtQuick ships a `Color` singleton that shadows the shell's `qs.Commons` `Color`, so every theme colour
+reads as undefined (black bar, invisible text). Upstream fixed it in Omarchy 4.0.5 (PR #14553, issue #15545) by
+qualifying every use as `Commons.Color` (`import qs.Commons as Commons`); the patch backports that to older
+builds (the Asahi bundle was still on b8ed395 in Oct 2026). Our plugins (`roman.lock`, `roman.monitor`) use
+`Commons.Color` too, so they work with and without the patch. Skip once Omarchy is 4.0.5 or newer, or if the
+patch no longer applies.
+
+```bash
+sudo patch -p1 -d /usr/share/omarchy/shell < omarchy-setup/omarchy-shell-qt612-color.patch
+omarchy-restart-shell
+```
+
+Verify: `journalctl --user -t omarchy-shell --since -1min | grep -c TypeError` is 0 or close to it.
+
 ## After applying
 
 ```bash
