@@ -673,6 +673,22 @@ omarchy transcode ascii omarchy-setup/screensaver/arch.svg omarchy-setup/screens
 
 On a narrow-terminal machine (step 21) lower `--width` to fit.
 
+## 42. Big download caches on the data disk
+
+Machines with a small root and a roomy data disk only (GPD: `/mnt/data/omarchy/cache`). uv through its config
+file (read by every shell, unit and ssh command); huggingface as a symlink, since `HF_HOME` would miss ssh
+commands. uv then copies into venvs instead of hard-linking (other filesystem).
+
+```bash
+C=/mnt/data/omarchy/cache   # adjust
+mkdir -p $C ~/.config/uv
+mv ~/.cache/huggingface $C/huggingface && ln -s $C/huggingface ~/.cache/huggingface
+printf 'cache-dir = "%s/uv"\n' $C > ~/.config/uv/uv.toml
+mv ~/.cache/uv $C/uv
+```
+
+Verify: `uv cache dir` prints the new path; `ls -l ~/.cache/huggingface` shows the link.
+
 ## 43. Shell colours under Qt 6.12
 
 Qt 6.12's QtQuick ships a `Color` singleton that shadows the shell's `qs.Commons` `Color`, so every theme colour
