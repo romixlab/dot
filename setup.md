@@ -716,13 +716,14 @@ Verify in a new terminal: `bind -q menu-complete` names `\C-i`.
 
 Alt+D at the prompt opens `tpm d`'s list of the library (tpm_cli LIB-11): on an empty line the pick becomes
 `tpm d PICK`, inside a command it goes in at the cursor (Ctrl-Y: the full path). Replaces bash's Alt+D kill-word.
-The switch must come before tpm's completion line in `~/.bashrc`:
+The switch goes just above the `# >>> tpm completion` block of `~/.bashrc`: that block belongs to `tpm provision`,
+which rewrites it, so a line inside it is lost.
 
 ```bash
-sed -i 's|^command -v tpm >/dev/null 2>&1 && source <(COMPLETE=bash tpm)$|export TPM_ALT_D=1\n&|' ~/.bashrc
+grep -q '^export TPM_ALT_D=1' ~/.bashrc || sed -i 's|^# >>> tpm completion (managed by tpm provision|export TPM_ALT_D=1  # Alt+D opens the tpm d library picker (dot step 45)\n&|' ~/.bashrc
 ```
 
-Verify in a new terminal (tpm 0.205.36 or newer): Alt+D on an empty prompt opens the library list.
+Verify in a new terminal (tpm 0.205.36 or newer): `bind -X | grep ed` shows `"\ed" "_tpm_pick_tpm"`.
 
 ## After applying
 
