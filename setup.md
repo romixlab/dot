@@ -705,6 +705,21 @@ omarchy-restart-shell
 
 Verify: `journalctl --user -t omarchy-shell --since -1min | grep -c TypeError` is 0 or close to it.
 
+## 44. Bash: Tab cycles through completions
+
+Tab steps through the candidates one by one (Shift+Tab goes back) instead of listing them, e.g. the documents
+`tpm d g0 errata<TAB>` offers. `~/.inputrc` replaces `/etc/inputrc`, so it includes it first to keep the defaults.
+
+```bash
+cat > ~/.inputrc <<'EOF'
+$include /etc/inputrc
+TAB: menu-complete
+"\e[Z": menu-complete-backward
+EOF
+```
+
+Verify in a new terminal: `bind -q menu-complete` names `\C-i`.
+
 ## After applying
 
 ```bash
