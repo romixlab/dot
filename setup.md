@@ -42,6 +42,16 @@ directly from a terminal, which bypasses the desktop entry). If a future
 machine still lacks `qt5-wayland` and KeePassXC renders tiny again, redo the
 override then — don't apply it pre-emptively.
 
+An override made earlier stays behind when `qt5-wayland` arrives later (it is
+pulled in as a dependency, e.g. by `qt5-declarative`): on omarchy-m1 the
+18 Oct 2026 update installed it while
+`~/.local/share/applications/org.keepassxc.KeePassXC.desktop` still had
+`Exec=env QT_SCALE_FACTOR=2 keepassxc`, and KeePassXC came up at 4x. Whenever
+`pacman -Q qt5-wayland` succeeds, check `ls ~/.local/share/applications | rg -i keepass`
+and trash any such override (`gio trash ...`), then quit KeePassXC fully
+(tray too) and start it again. `hyprctl clients` shows `xwayland: 0` for
+KeePassXC when it runs natively.
+
 Enable in KeePassXC: Tools → Settings → SSH Agent → Enable (vault under `~/sync/by_letter/P/`).
 Verify: `ssh-add -l` → `The agent has no identities.` (not a connection error).
 Key setup: [KeePassXC/ssh-agent writeup](https://blog.burakcankus.com/keepassxc-and-ssh-agent-setup/).
