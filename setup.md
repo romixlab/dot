@@ -677,19 +677,23 @@ On a narrow-terminal machine (step 21) lower `--width` to fit.
 
 ## 42. Big download caches on the data disk
 
-Machines with a small root and a roomy data disk only (GPD: `/mnt/data/omarchy/cache`). uv through its config
-file (read by every shell, unit and ssh command); huggingface as a symlink, since `HF_HOME` would miss ssh
-commands. uv then copies into venvs instead of hard-linking (other filesystem).
+Machines with a small root and a roomy data disk only (GPD: `/mnt/data/omarchy/cache`). The whole `~/.cache` is a
+symlink to the data disk, so every tool, shell, unit and ssh command follows it (`XDG_CACHE_HOME` would miss ssh
+commands, and the systemd user manager sets it to `~/.cache` anyway). uv also gets its config file. uv then copies
+into venvs instead of hard-linking (other filesystem).
 
 ```bash
 C=/mnt/data/omarchy/cache   # adjust
 mkdir -p $C ~/.config/uv
-mv ~/.cache/huggingface $C/huggingface && ln -s $C/huggingface ~/.cache/huggingface
 printf 'cache-dir = "%s/uv"\n' $C > ~/.config/uv/uv.toml
-mv ~/.cache/uv $C/uv
+rsync -a ~/.cache/ $C/
+mv ~/.cache ~/.cache.old && ln -s $C ~/.cache
+rsync -a --update ~/.cache.old/ $C/   # what running programs wrote meanwhile
 ```
 
-Verify: `uv cache dir` prints the new path; `ls -l ~/.cache/huggingface` shows the link.
+Then delete `~/.cache.old` (programs with files still open there keep them until they restart).
+
+Verify: `ls -ld ~/.cache` shows the link; `uv cache dir` prints `$C/uv`.
 
 ## 43. Shell colours under Qt 6.12
 
