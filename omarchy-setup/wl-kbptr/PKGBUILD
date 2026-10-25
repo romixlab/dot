@@ -1,0 +1,27 @@
+# AUR wl-kbptr 0.4.1 doesn't build against OpenCV 5; upstream main does (0854a51).
+# Drop this and use the AUR package once it is past 0.4.1.
+pkgname=wl-kbptr
+pkgver=0.4.1.r8.6ef84f3
+pkgrel=1
+_commit=6ef84f398816b7a007ba969047e43d095f332175
+url="https://github.com/moverest/wl-kbptr"
+pkgdesc="Control the mouse pointer with the keyboard on Wayland"
+arch=('x86_64' 'aarch64')
+license=('GPL-3.0')
+depends=('cairo' 'wayland' 'libxkbcommon' 'opencv' 'pixman')
+makedepends=('meson' 'wayland-protocols')
+source=("$pkgname-$_commit.tar.gz::https://github.com/moverest/wl-kbptr/archive/$_commit.tar.gz")
+sha256sums=('90c494554bc4ece2f5d0569a99b6fbae597a653fc19d2d5daff9c0177a8d0e12')
+
+build() {
+    arch-meson "$pkgname-$_commit" build -Dopencv=enabled
+    ninja -C build
+}
+
+package() {
+    DESTDIR="$pkgdir" ninja -C build install
+    cd "$pkgname-$_commit"
+    install -Dm 0755 helpers/wl-kbptr-sway-active-win -t "$pkgdir/usr/bin/"
+    install -Dm 0644 LICENSE -t "$pkgdir/usr/share/licenses/wl-kbptr/"
+    install -Dm 0644 README.md -t "$pkgdir/usr/share/doc/wl-kbptr/"
+}

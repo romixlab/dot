@@ -1,0 +1,19 @@
+# Tokyo Night, light-touch: the screen stays readable under the grid.
+# Colours are #RRGGBBAA.
+
+[mode_tile]
+label_color=#c0caf5ee
+label_select_color=#e0af68ff
+unselectable_bg_color=#1a1b2630
+selectable_bg_color=#7aa2f70c
+selectable_border_color=#7aa2f750
+
+[mode_bisect]
+label_color=#c0caf5ee
+pointer_color=#f7768eff
+unselectable_bg_color=#1a1b2630
+even_area_bg_color=#7aa2f710
+even_area_border_color=#7aa2f760
+odd_area_bg_color=#bb9af710
+odd_area_border_color=#bb9af760
+history_border_color=#565f8960

@@ -739,6 +739,21 @@ grep -q '^export TPM_ALT_D=1' ~/.bashrc || sed -i 's|^# >>> tpm completion (mana
 
 Verify in a new terminal (tpm 0.205.36 or newer): `bind -X | grep ed` shows `"\ed" "_tpm_pick_tpm"`.
 
+## 46. Keyboard pointer grid (wl-kbptr)
+
+SUPER+M shows a labelled grid over the screen: type a label to zoom into that cell, then bisect; `g`/`h`/`b`
+click left/right/middle, Backspace steps back. Check SUPER+M is still free (`omarchy menu keybindings --print`).
+AUR 0.4.1 doesn't build against OpenCV 5, so the PKGBUILD is pinned to upstream main; switch to `yay -S wl-kbptr` once
+the AUR package is past 0.4.1.
+
+```bash
+(cd omarchy-setup/wl-kbptr && BUILDDIR=/tmp/wl-kbptr SRCDEST=/tmp/wl-kbptr PKGDEST=/tmp/wl-kbptr makepkg -si)
+cat omarchy-setup/kbptr-bindings-append.lua >> ~/.config/hypr/bindings.lua
+mkdir -p ~/.config/wl-kbptr && cp omarchy-setup/wl-kbptr/config ~/.config/wl-kbptr/config   # Tokyo Night colours
+```
+
+Verify: SUPER+M shows the grid.
+
 ## After applying
 
 ```bash
