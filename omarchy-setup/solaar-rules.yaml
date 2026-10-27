@@ -4,3 +4,18 @@
 - Key: [Smart Shift, pressed]
 - KeyPress: [Super_L, s]
 ...
+---
+# Thumb button held + move left: previous workspace
+- MouseGesture: [Mouse Gesture Button, Mouse Left]
+- KeyPress: [Super_L, Shift_L, Tab]
+...
+---
+# Thumb button held + move right: next workspace
+- MouseGesture: [Mouse Gesture Button, Mouse Right]
+- KeyPress: [Super_L, Tab]
+...
+---
+# Thumb button click: former workspace
+- MouseGesture: [Mouse Gesture Button]
+- KeyPress: [Super_L, Control_L, Tab]
+...
