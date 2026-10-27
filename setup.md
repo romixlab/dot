@@ -441,25 +441,9 @@ EOF
 
 Removed (reverted). Skip.
 
-## 30. sccache: compiled Rust dependencies shared across projects
+## 30. sccache: dropped (27 Oct 2026)
 
-Pick per machine: `DIR` on the disk with the most free space (`df -h`; `~/.cache/sccache`
-if home has room), `SIZE` ≈ a quarter of that free space. Old entries are evicted at the limit.
-
-```bash
-omarchy pkg add sccache
-DIR=~/.cache/sccache SIZE=20G   # adjust
-mkdir -p "$DIR" ~/.config/sccache
-printf '[cache.disk]\ndir = "%s"\nsize = %s\n' "$DIR" "$(numfmt --from=iec "$SIZE")" > ~/.config/sccache/config
-# rustc-wrapper under [build] in ~/.cargo/config.toml, keeping existing keys
-grep -q '^rustc-wrapper' ~/.cargo/config.toml 2>/dev/null || {
-  grep -q '^\[build\]' ~/.cargo/config.toml 2>/dev/null \
-    && sed -i '/^\[build\]/a rustc-wrapper = "sccache"' ~/.cargo/config.toml \
-    || printf '[build]\nrustc-wrapper = "sccache"\n' >> ~/.cargo/config.toml; }
-sccache --stop-server 2>/dev/null; sccache --show-stats | grep -E 'Cache location|Max cache size'
-```
-
-Check reuse with `sccache --show-stats`; bypass once with `RUSTC_WRAPPER= cargo build`.
+Removed. Skip. Compiled Rust dependencies are shared by tpm's deps pool instead (reflinks inside the cargo build-dir root, tpm_cli ops#27oct-1317): sccache can't cache incrementally built crates, so it only ever held dependencies, and every hit was a full copy rather than a reflink. On a PC set up earlier: delete `rustc-wrapper = "sccache"` from `~/.cargo/config.toml`, `sccache --stop-server`, and trash its cache dir and `~/.config/sccache`.
 
 ## 31. Public DNS instead of the home router
 
