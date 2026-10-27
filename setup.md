@@ -738,6 +738,20 @@ mkdir -p ~/.config/wl-kbptr && cp omarchy-setup/wl-kbptr/config ~/.config/wl-kbp
 
 Verify: SUPER+M shows the grid.
 
+## 47. MX Master 3S: button behind the wheel sends Super+S
+
+The Smart Shift button (ratchet toggle) is diverted to Solaar, a rule presses Super+S (toggle scratchpad). Flicking the
+wheel still frees it (SmartShift auto). Solaar must run for the rule to fire.
+
+```bash
+sudo pacman -S solaar
+solaar config "MX Master 3S" divert-keys "Smart Shift" Diverted
+cp omarchy-setup/solaar-rules.yaml ~/.config/solaar/rules.yaml
+cat omarchy-setup/solaar-autostart-append.lua >> ~/.config/hypr/autostart.lua
+```
+
+Verify: after a relogin (or `uwsm-app -- solaar --window=hide`), the button behind the wheel toggles the scratchpad.
+
 ## After applying
 
 ```bash

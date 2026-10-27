@@ -1,0 +1,6 @@
+%YAML 1.3
+---
+# MX Master 3S: the button behind the wheel (Smart Shift) sends Super+S (toggle scratchpad)
+- Key: [Smart Shift, pressed]
+- KeyPress: [Super_L, s]
+...
