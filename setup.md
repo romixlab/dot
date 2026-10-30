@@ -755,6 +755,17 @@ cat omarchy-setup/solaar-autostart-append.lua >> ~/.config/hypr/autostart.lua
 Verify: after a relogin (or `uwsm-app -- solaar --window=hide`), the button behind the wheel toggles the scratchpad,
 thumb button + move left/right switches workspaces.
 
+## 48. Claude runs root steps with pkexec
+
+Omarchy's shell has a built-in polkit agent (`omarchy.polkit`, always loaded), so `pkexec` from a Claude session shows a
+password dialog with the exact command. Tell every Claude session to use it instead of handing over `sudo` commands:
+
+```bash
+cat omarchy-setup/claude-pkexec-append.md >> ~/.claude/CLAUDE.md
+```
+
+Verify: `pkexec id -u` from a Claude session shows the dialog and prints 0.
+
 ## After applying
 
 ```bash
