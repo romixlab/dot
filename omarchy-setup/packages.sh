@@ -10,4 +10,4 @@ omarchy default browser firefox
 omarchy install service tailscale
 
 omarchy pkg add freecad just keepassxc kicad syncthing uv speedcrunch usbutils
-omarchy pkg aur add winbox
+omarchy pkg aur add winbox spacenavd

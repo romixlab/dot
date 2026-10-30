@@ -766,6 +766,32 @@ cat omarchy-setup/claude-pkexec-append.md >> ~/.claude/CLAUDE.md
 
 Verify: `pkexec id -u` from a Claude session shows the dialog and prints 0.
 
+## 49. 3Dconnexion SpaceMouse (spacenavd)
+
+Free driver for the SpaceMouse Wireless; FreeCAD and KiCad use it through `/var/run/spnav.sock` (the X11 error in
+`/var/log/spnavd.log` is harmless on Wayland). Settings in `/etc/spnavrc`; `spnavcfg` (AUR) is an optional GUI.
+
+```bash
+yay -S spacenavd
+printf '\n# --- local settings ---\nswap-yz = true\nsensitivity = 2.5\nsensitivity-translation-x = 4.0\nsensitivity-translation-z = 4.0\naxismap4 = 5\naxismap5 = 4\n' | sudo tee -a /etc/spnavrc
+sudo systemctl enable --now spacenavd
+```
+
+- `swap-yz`: KiCad's 2D view pans on slide fwd/back and zooms on lift/push (a sheet lying on the desk); swapped, lift/push
+  pans and fwd/back zooms. It is global and swaps rotations too; `axismap4/5` swap the rotations back (2D ignores
+  rotation). Per-axis sensitivity applies after the swap: x and z are the pan axes, y is zoom.
+- KiCad (closed, `~/.config/kicad/10.0/kicad_common.json`): `spacemouse.reverse_pan_x` and `reverse_pan_y` true. The 3D
+  viewer stays imperfect: left/right pan is reversed there (2D and 3D share the flag with opposite conventions) and it
+  rotates about the board's axes.
+- FreeCAD (closed, `~/.config/FreeCAD/v1-1/user.cfg`, BaseApp/Spaceball/Motion), SolidWorks-style object mode: its Linux
+  path treats the puck like a sheet on the desk too, so the driver swap already fixes its pans; `Remapping` = 12354
+  swaps roll and twist back, `ZoomReverse` and `SpinReverse` (after the remap: roll) = 1,
+  `PanLRSensitivity` and `PanUDSensitivity` = -42 (x0.24, evens out the 4x pan boost). Leave Flip Y/Z off; fix a wrong
+  direction with its Reverse box (Tools > Customize > Spaceball Motion).
+- Restart KiCad and FreeCAD after restarting spacenavd (they do not reconnect).
+
+Verify: `/var/log/spnavd.log` shows "using device: 3Dconnexion SpaceMouse ...".
+
 ## After applying
 
 ```bash
