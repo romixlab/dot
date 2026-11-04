@@ -792,6 +792,20 @@ sudo systemctl enable --now spacenavd
 
 Verify: `/var/log/spnavd.log` shows "using device: 3Dconnexion SpaceMouse ...".
 
+## 50. Readable KiCad diffs in git (berc textconv)
+
+`git diff` and `git log -p` show `.kicad_sch`, `.kicad_pcb` and `.kicad_pro` as sorted text through `berc textconv`
+(better_erc, `just deploy` in `~/git/better_erc` installs `berc`). The repos carry the `diff=kicad` attributes. No
+`cachetextconv`: berc takes 0.12 s on a 17 MB board, and the cache keeps showing old text after a berc upgrade.
+
+```bash
+git config --global diff.kicad.textconv "berc textconv"
+git config --global --unset diff.kicad.cachetextconv || true
+```
+
+Verify: `git -C ~/git/hw config --get-regexp 'diff\.kicad'` shows only the textconv line, and
+`git -C ~/git/hw log -p -1 -- '*.kicad_pro'` prints `key = value` lines, not JSON.
+
 ## After applying
 
 ```bash
