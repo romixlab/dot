@@ -616,8 +616,12 @@ Assignments:
 | gpd-omarchy      | work    | `purple`                 |
 | mail.vhrd.tech   | prod    | `97;41` white on red     |
 | vhrd.tech (web)  | prod    | `30;48;5;208` on orange  |
+| hetzner-1        | prod    | `97;48;5;125` on wine    |
+| core-1           | prod    | `97;48;5;161` on raspb.  |
 | omarchy-pve      | lab     | `97;44` (not applied)    |
 | mx3 (VM)         | lab     | `97;48;5;31` (not appl.) |
+| build-1          | lab     | `97;48;5;61` on slate    |
+| core-almaty      | lab     | `97;48;5;24` on navy     |
 
 Work PCs (Starship, step 28 first): recolour the whole prompt and put the icon before the host name.
 
@@ -627,7 +631,7 @@ sed -i "s/cyan/$C/g; /^\[directory\]/a style = \"bold $C\"" ~/.config/starship.t
 sed -i '/^\[hostname\]/,/^format/s/^format = "\[/format = "💻 [/' ~/.config/starship.toml
 ```
 
-Other kinds (bash): append a PS1 to `~/.bashrc` (overrides the distro default above it).
+Other kinds (bash): append a PS1 to `~/.bashrc` (overrides the distro default above it). hetzner-1's root home starts empty: copy `.bashrc` and `.bash_profile` from `/etc/skel` first.
 
 ```bash
 grep -q 'dot step 40' ~/.bashrc || cat >> ~/.bashrc <<'EOF'
@@ -792,7 +796,58 @@ sudo systemctl enable --now spacenavd
 
 Verify: `/var/log/spnavd.log` shows "using device: 3Dconnexion SpaceMouse ...".
 
-## 50. Readable KiCad diffs in git (berc textconv)
+## 50. ssh jump to hetzner-1 through the mail server (omarchy-m1)
+
+For when the direct return path from Almaty loses packets. Direct stays the default: it is faster on a clean path. Needs the `romix.lab` key in the agent, and the tailnet rule `mail` -> `tag:kvm-host:22` (tpm `area/ops/tailnet-policy.hujson`).
+
+`~/.ssh/config`:
+
+```
+Host hetzner-1-mail
+  HostName 100.93.215.34
+  HostKeyAlias 100.93.215.34
+  User root
+  ProxyJump roman@mail.vhrd.tech:7722
+```
+
+Verify: `ssh hetzner-1-mail true`.
+
+## 51. WireGuard relay to hetzner-1 through the web server (omarchy-m1)
+
+Carries hetzner-1, core-1 and build-1 when the direct path from Almaty loses packets. Off by default, adds about 30-50 ms. `wg genkey` to `/etc/wireguard/hzrelay.key` (600), then `/etc/wireguard/hzrelay.conf` (600):
+
+```
+[Interface]
+Address = 10.65.0.2/30
+PostUp = wg set %i private-key /etc/wireguard/hzrelay.key
+
+[Peer]
+PublicKey = 23BNUEYCG8CSMlgYGmCxCVKI2/N6yTZ/VvGyuH4KVTM=
+Endpoint = 80.208.229.110:51821
+AllowedIPs = 10.65.0.0/30, 65.108.137.108/32
+PersistentKeepalive = 25
+```
+
+Switch: `systemctl start|stop wg-quick@hzrelay` (polkit dialog). Verify: `ip route get 65.108.137.108` says `dev hzrelay`.
+
+## 52. Wi-Fi MTU 1492 on the Almaty PPPoE line
+
+The router (PPPoE, 1492) doesn't clamp TCP MSS and full 1500-byte packets vanish, so TLS to many sites stalls about 5 s. Per Wi-Fi connection, so other networks keep 1500: `Flox1k-5G` on omarchy-m1, `Flox1k` on gpd-omarchy.
+
+```bash
+nmcli con mod <connection> 802-11-wireless.mtu 1492
+nmcli device reapply <wifi device>
+```
+
+Verify: `ip link show <wifi device>` says `mtu 1492`, and `curl -o /dev/null -w '%{time_appconnect}\n' https://www.hetzner.com` is well under 1 s.
+
+## 53. KiCad 10.0.8 or newer
+
+KiCad 10.0.7 asserts on hotkeys on Wayland (`wxGetKeyStateGTK: Unsupported key`) and loses pad and net names when a project is reopened (upstream #25747). Both are fixed in 10.0.8, so no launcher overrides are needed.
+
+Verify: `pacman -Q kicad` shows 10.0.8 or newer, and there are no `org.kicad.*.desktop` files in `~/.local/share/applications`.
+
+## 54. Readable KiCad diffs in git (berc textconv)
 
 `git diff` and `git log -p` show `.kicad_sch`, `.kicad_pcb` and `.kicad_pro` as sorted text through `berc textconv`
 (better_erc, `just deploy` in `~/git/better_erc` installs `berc`). The repos carry the `diff=kicad` attributes. No
