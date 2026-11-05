@@ -1,0 +1,12 @@
+[Unit]
+Description=Pie menu in KiCad on the SpaceMouse buttons
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=%h/git/dot/spacemouse-menu/spacemouse-menu.py run
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target

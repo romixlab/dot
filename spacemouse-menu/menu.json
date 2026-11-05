@@ -1,0 +1,17 @@
+[
+  {
+    "title": "PCB Editor",
+    "center": {
+      "left": { "label": "Highlight net", "key": "S-grave" },
+      "right": null
+    },
+    "ring": [
+      { "label": "Route track", "key": "x" },
+      { "label": "Switch layer", "key": "v" },
+      { "label": "Fill zones", "key": "b" },
+      { "label": "3D viewer", "key": "A-3" },
+      { "label": "Add footprint", "key": "a" },
+      { "label": "Draw zone", "key": "C-S-z" }
+    ]
+  }
+]

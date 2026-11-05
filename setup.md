@@ -953,6 +953,19 @@ omarchy restart shell
 
 Restart Firefox. Verify: with the tunnel on, `ss -tnp | rg 127.0.0.1:1080` lists firefox and digikey.com loads; with it off, sites still load.
 
+## 58. Pie menu in KiCad on the SpaceMouse buttons
+
+Hold a SpaceMouse button in the PCB Editor: a pie menu opens at the cursor. A press without moving the mouse fires the centre slot of that button. Crossing the outer circle fires the slice under the mouse, and releasing inside the ring cancels. The cursor returns to where it started, because KiCad's hotkeys act at the cursor. Entries and keys (keyd macros, matching `~/.config/kicad/10.0/user.hotkeys`) are in `spacemouse-menu/menu.json`. Needs step 49 and keyd. KiCad reads the keys like a physical keyboard.
+
+```bash
+sudo usermod -aG keyd "$USER"   # then log out and back in
+~/git/dot/spacemouse-menu/spacemouse-menu.py calibrate   # press left, then right
+systemctl --user link ~/git/dot/spacemouse-menu/spacemouse-menu.service
+systemctl --user enable --now spacemouse-menu
+```
+
+Verify: tap the left button on a net in the PCB Editor and it highlights, tap again and it clears. Flick past the outer circle over Switch layer and the layer changes.
+
 ## After applying
 
 ```bash
