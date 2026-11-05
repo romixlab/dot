@@ -25,10 +25,10 @@
       "both": [
         {"label": "Cut", "key": "C-x"},
         {"label": "Move by coordinates", "key": "S-m"},
-        null,
-        {"label": "Delete", "key": "delete"},
         {"label": "Redo", "key": "C-y"},
-        {"label": "Undo", "key": "C-z"}
+        {"label": "Delete", "key": "delete"},
+        {"label": "Undo", "key": "C-z"},
+        null
       ]
     }
   }
