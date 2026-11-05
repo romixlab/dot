@@ -2,16 +2,34 @@
   {
     "title": "PCB Editor",
     "center": {
-      "left": { "label": "Highlight net", "key": "S-grave" },
-      "right": null
+      "left": {"label": "Highlight net", "key": "S-grave"},
+      "right": {"label": "Route track", "key": "x"}
     },
-    "ring": [
-      { "label": "Route track", "key": "x" },
-      { "label": "Switch layer", "key": "v" },
-      { "label": "Fill zones", "key": "b" },
-      { "label": "3D viewer", "key": "A-3" },
-      { "label": "Add footprint", "key": "a" },
-      { "label": "Draw zone", "key": "C-S-z" }
-    ]
+    "rings": {
+      "left": [
+        {"label": "Change layer", "key": "v"},
+        {"label": "Place via", "key": "v"},
+        {"label": "Refill zones", "key": "b"},
+        {"label": "Show/hide ratsnest", "key": "C-S-r"},
+        {"label": "Layer view mode", "key": "h"},
+        {"label": "Esc", "key": "esc"}
+      ],
+      "right": [
+        {"label": "Copy", "key": "C-c"},
+        {"label": "Flip to other side", "key": "f"},
+        {"label": "Update from schematic", "key": "f8"},
+        {"label": "Paste", "key": "C-v"},
+        {"label": "Draw zone", "key": "C-S-z"},
+        {"label": "Measure", "key": "C-S-m"}
+      ],
+      "both": [
+        {"label": "Cut", "key": "C-x"},
+        {"label": "Move by coordinates", "key": "S-m"},
+        null,
+        {"label": "Delete", "key": "delete"},
+        {"label": "Redo", "key": "C-y"},
+        {"label": "Undo", "key": "C-z"}
+      ]
+    }
   }
 ]

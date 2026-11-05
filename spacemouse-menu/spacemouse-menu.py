@@ -95,33 +95,37 @@ def run(args):
     menus = json.loads(MENUS.read_text())
     sides = {number: side for side, number in load_buttons().items()}
     shell = subprocess.Popen(["quickshell", "-n", "-p", str(SHELL)])
-    held = None
+    held = set()
     for kind, button in events(args.socket):
         if shell.poll() is not None:
             sys.exit(f"quickshell exited with {shell.returncode}")
-        if kind == PRESS and held is None and button in sides:
-            menu = menu_for(menus, hyprctl("activewindow"))
-            if menu is None:
-                continue
-            x, y = (hyprctl("cursorpos")[k] for k in ("x", "y"))
-            monitor = next(m for m in hyprctl("monitors") if m["focused"])
-            held = (button, x, y)
-            print(f"press button {button} in {menu['title']} at {x},{y}", flush=True)
+        if kind == PRESS and button in sides:
+            if not held:
+                menu = menu_for(menus, hyprctl("activewindow"))
+                if menu is None:
+                    continue
+                x, y = (hyprctl("cursorpos")[k] for k in ("x", "y"))
+                monitor = next(m for m in hyprctl("monitors") if m["focused"])
+            held.add(button)
+            # A second button while the first is held switches to the ring of both.
+            side = sides[button] if len(held) == 1 else "both"
+            print(f"press button {button} in {menu['title']} at {x},{y}: {side} ring", flush=True)
             ipc("open", json.dumps({
                 "screen": monitor["name"],
                 "x": x - monitor["x"],
                 "y": y - monitor["y"],
-                "side": sides[button],
+                "side": side,
                 "center": menu["center"],
-                "ring": menu["ring"],
+                "ring": menu["rings"][side],
                 "colors": load_colors(),
                 "home": [x, y],
                 "script": str(Path(__file__).resolve()),
             }))
-        elif kind == RELEASE and held and button == held[0]:
+        elif kind == RELEASE and button in held:
+            held.discard(button)
+            if held:
+                continue
             key = ipc("release")
-            _, x, y = held
-            held = None
             print(f"release button {button}: {key or 'no action'}", flush=True)
             # "closed": the menu already fired or was cancelled, and the mouse is free again.
             if key != "closed":

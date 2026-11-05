@@ -11,12 +11,17 @@ ShellRoot {
 
   readonly property real outerRadius: 180
   readonly property real centerRadius: 64
+  // A release sooner than this is a tap: it fires the button's centre slot, and the menu never shows.
+  readonly property int tapMs: 250
 
   property var menu: null
   // The last menu stays in place when closing, so the closing window's bindings keep their data.
   property bool shown: false
   // Index of the ring slice under the mouse, -1 while the mouse is in the centre.
   property int hot: -1
+  // The centre half under the mouse, the pressed button's own until the mouse moves. "both" lights neither half.
+  property string centerSide: "left"
+  property real openedAt: 0
 
   readonly property var centerItem: menu ? menu.center[menu.side] : null
 
@@ -27,6 +32,7 @@ ShellRoot {
     var distance = Math.hypot(dx, dy)
     if (distance <= centerRadius) {
       hot = -1
+      if (dx !== 0) centerSide = dx < 0 ? "left" : "right"
       return
     }
     // Clockwise from the top, with slice 0 centred on the top.
@@ -34,12 +40,19 @@ ShellRoot {
     var angle = Math.atan2(dx, -dy) + 2 * Math.PI + step / 2
     hot = Math.floor(angle / step) % menu.ring.length
     // Crossing the outer circle fires the slice at once, without waiting for the release.
-    if (distance >= outerRadius) {
-      var key = menu.ring[hot].key
-      console.info("fired on crossing:", key)
-      shown = false
-      Quickshell.execDetached([menu.script, "fire", key, String(menu.home[0]), String(menu.home[1])])
-    }
+    if (distance >= outerRadius && menu.ring[hot]) fire(menu.ring[hot])
+  }
+
+  function fire(item) {
+    console.info("fired:", item.key)
+    shown = false
+    Quickshell.execDetached([menu.script, "fire", item.key, String(menu.home[0]), String(menu.home[1])])
+  }
+
+  function click() {
+    var item = hot < 0 ? menu.center[centerSide] : menu.ring[hot]
+    if (item) fire(item)
+    else shown = false
   }
 
   IpcHandler {
@@ -48,13 +61,16 @@ ShellRoot {
     function open(payload: string): void {
       root.hot = -1
       root.menu = JSON.parse(payload)
+      root.centerSide = root.menu.side
+      root.openedAt = Date.now()
       root.shown = true
     }
 
     function release(): string {
       if (!root.shown) return "closed"
-      // Only the centre fires on release: ring slices fire on crossing, so releasing in the ring cancels.
-      var key = root.hot < 0 && root.centerItem ? root.centerItem.key : ""
+      // Only a tap fires on release. Once the menu shows, a release cancels.
+      var tap = Date.now() - root.openedAt < root.tapMs
+      var key = tap && root.hot < 0 && root.centerItem ? root.centerItem.key : ""
       root.shown = false
       return key
     }
@@ -77,11 +93,12 @@ ShellRoot {
         hoverEnabled: true
         acceptedButtons: Qt.AllButtons
         onPositionChanged: mouse => root.trackMouse(mouse.x, mouse.y)
-        // A mouse click cancels, and frees the screen if a button release ever gets lost.
-        onPressed: root.shown = false
+        // A click fires the slot under the mouse. On a free slot it just closes,
+        // which also frees the screen if a button release ever gets lost.
+        onPressed: root.click()
       }
 
-      // A short press fires the centre slot without the menu flashing up.
+      // A tap fires the centre slot without the menu flashing up.
       Item {
         id: pie
         x: root.menu.x
@@ -89,7 +106,7 @@ ShellRoot {
         opacity: 0
 
         Timer {
-          interval: 120
+          interval: root.tapMs
           running: true
           onTriggered: pie.opacity = 1
         }
@@ -106,7 +123,7 @@ ShellRoot {
             readonly property real step: 360 / root.menu.ring.length
             readonly property real middle: -90 + index * step
             readonly property real labelRadius: (root.outerRadius + root.centerRadius) / 2
-            readonly property bool lit: root.hot === index
+            readonly property bool lit: root.hot === index && modelData !== null
 
             Shape {
               preferredRendererType: Shape.CurveRenderer
@@ -138,7 +155,9 @@ ShellRoot {
               width: 96
               horizontalAlignment: Text.AlignHCenter
               wrapMode: Text.WordWrap
-              text: slice.modelData.label
+              text: slice.modelData ? slice.modelData.label : "Free"
+              font.italic: !slice.modelData
+              opacity: slice.modelData ? 1 : 0.6
               font.pixelSize: 14
               color: slice.lit ? root.menu.colors.background : root.menu.colors.foreground
             }
@@ -155,7 +174,7 @@ ShellRoot {
 
             readonly property var item: root.menu.center[modelData]
             readonly property real direction: modelData === "left" ? -1 : 1
-            readonly property bool lit: root.hot < 0 && root.menu.side === modelData
+            readonly property bool lit: root.hot < 0 && root.centerSide === modelData
 
             Shape {
               preferredRendererType: Shape.CurveRenderer
@@ -190,9 +209,9 @@ ShellRoot {
           }
         }
 
-        // The free centre slot is shown, and says why nothing happens on release.
+        // A free slot is shown, and says why nothing happens.
         Rectangle {
-          visible: root.hot < 0 && !root.centerItem
+          visible: root.hot < 0 ? root.centerSide !== "both" && !root.menu.center[root.centerSide] : !root.menu.ring[root.hot]
           x: -width / 2
           y: root.outerRadius + 10
           width: reason.implicitWidth + 20
@@ -203,7 +222,7 @@ ShellRoot {
           Text {
             id: reason
             anchors.centerIn: parent
-            text: "Nothing assigned to this button yet: set it in menu.json"
+            text: "Nothing assigned to this slot yet: set it in menu.json"
             font.pixelSize: 12
             color: root.menu.colors.foreground
           }
