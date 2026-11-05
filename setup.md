@@ -120,7 +120,7 @@ cp settings.json keymap.json ~/.config/zed/
 
 ## 10. Workspace app launcher
 
-Opens Firefox/terminal/SpeedCrunch+Obsidian/KeePassXC/Zed onto fixed
+Opens Firefox/terminal/SpeedCrunch/KeePassXC/Zed onto fixed
 workspaces (silent, no focus stealing) on `SUPER SHIFT + U`. See
 [`hypr-workspace-launcher/README.md`](hypr-workspace-launcher/README.md).
 
@@ -860,6 +860,54 @@ git config --global --unset diff.kicad.cachetextconv || true
 
 Verify: `git -C ~/git/hw config --get-regexp 'diff\.kicad'` shows only the textconv line, and
 `git -C ~/git/hw log -p -1 -- '*.kicad_pro'` prints `key = value` lines, not JSON.
+
+## 55. aerc mail client (mail.vhrd.tech)
+
+```bash
+omarchy pkg add aerc w3m   # w3m: aerc's default HTML filter, no network access
+xdg-mime default aerc.desktop x-scheme-handler/mailto
+secret-tool store --label="aerc roman@vhrd.tech" service aerc account roman@vhrd.tech   # asks for the mailbox password
+```
+
+`~/.config/aerc/accounts.conf`, mode `600`. The password stays in the keyring:
+
+```ini
+[vhrd]
+source            = imaps://roman%40vhrd.tech@mail.vhrd.tech:993
+source-cred-cmd   = secret-tool lookup service aerc account roman@vhrd.tech
+outgoing          = smtps://roman%40vhrd.tech@mail.vhrd.tech:465
+outgoing-cred-cmd = secret-tool lookup service aerc account roman@vhrd.tech
+default           = INBOX
+from              = Roman Isaikin <roman@vhrd.tech>
+copy-to           = Sent
+```
+
+Verify: `aerc` lists the inbox.
+
+## 56. Remove Omarchy's preinstalled apps and their shortcuts
+
+Not `omarchy remove preinstalls`: it also removes Tailscale's launcher and the `claude` and `gh` commands in `~/.local/bin`.
+
+`~/.config/hypr/hyprland.lua`, before `require("default.hypr.omarchy")`:
+
+```lua
+omarchy_preinstalled_bindings = false
+```
+
+`~/.config/hypr/bindings.lua`:
+
+```lua
+o.bind("SUPER + SHIFT + W", "Omawrite", { launch = "omawrite" })
+```
+
+```bash
+omarchy pkg drop cliamp omacut omacalc kdenlive obsidian
+cd ~/.local/share/applications
+gio trash Basecamp.desktop "Google Contacts.desktop" "Google Maps.desktop" "Google Messages.desktop" "Google Photos.desktop" HEY.desktop WhatsApp.desktop X.desktop YouTube.desktop Zoom.desktop
+update-desktop-database .
+```
+
+Verify: `omarchy menu keybindings --print` no longer lists HEY Email, X, YouTube or the Google apps.
 
 ## After applying
 

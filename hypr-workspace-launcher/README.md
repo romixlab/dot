@@ -9,7 +9,6 @@ running instead of spawning a duplicate.
 | Firefox | 1 | `firefox` |
 | Terminal (ghostty) | 2 | `com.mitchellh.ghostty` |
 | SpeedCrunch | 3 | `org.speedcrunch.speedcrunch` |
-| Obsidian | 3 | `md.obsidian.Obsidian` |
 | KeePassXC | 10 | `org.keepassxc.KeePassXC` |
 | Zed | 11 (the "Z" workspace from step 4) | `dev.zed.Zed` |
 

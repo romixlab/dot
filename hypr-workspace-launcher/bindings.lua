@@ -14,7 +14,6 @@ function omarchy_launch_workspace_session()
   launch_missing_on_workspace("^firefox$", "firefox", "1")
   launch_missing_on_workspace("^com\\.mitchellh\\.ghostty$", "ghostty", "2")
   launch_missing_on_workspace("^org\\.speedcrunch\\.speedcrunch$", "speedcrunch", "3")
-  launch_missing_on_workspace("^md\\.obsidian\\.Obsidian$", "obsidian", "3")
   launch_missing_on_workspace("^org\\.keepassxc\\.KeePassXC$", "keepassxc", "10")
   launch_missing_on_workspace("^dev\\.zed\\.Zed$", "zed", "11")
 end
