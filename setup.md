@@ -909,9 +909,9 @@ update-desktop-database .
 
 Verify: `omarchy menu keybindings --print` no longer lists HEY Email, X, YouTube or the Google apps.
 
-## 57. Optional: Digi-Key in Firefox through hetzner-1 (omarchy-m1)
+## 57. Optional: Firefox through hetzner-1, from a bar icon
 
-Not needed by default: skip on update unless asked. Digi-Key refuses the direct connection. Only Digi-Key goes through the tunnel, everything else stays direct. Needs KeePassXC unlocked (the key is in the agent); Digi-Key doesn't load until then. Logs in to hetzner-1 as root.
+Any PC on the tailnet with the key. Not needed by default: skip on update unless asked. For sites that refuse the direct connection, like Digi-Key. The `HetznerProxy` indicator in `roman.indicators` (󰖂, step 38's plugin) starts or stops the tunnel; off after login. On: all of Firefox goes through hetzner-1 and the icon stays in the bar. Off or tunnel down: Firefox goes direct by itself. Needs KeePassXC unlocked (the key is in the agent). Logs in to hetzner-1 as root. On a PC without this step the icon does nothing.
 
 `~/.config/systemd/user/hetzner-socks.service`:
 
@@ -933,8 +933,7 @@ WantedBy=default.target
 
 ```js
 function FindProxyForURL(url, host) {
-  if (/(^|\.)digikey\.[a-z.]+$/.test(host)) return "SOCKS5 127.0.0.1:1080";
-  return "DIRECT";
+  return "SOCKS5 127.0.0.1:1080; DIRECT";
 }
 ```
 
@@ -943,14 +942,16 @@ function FindProxyForURL(url, host) {
 ```js
 user_pref("network.proxy.type", 2);
 user_pref("network.proxy.autoconfig_url", "file:///home/roman/.config/mozilla/hetzner.pac");
+user_pref("network.proxy.failover_timeout", 5);
 ```
 
 ```bash
 systemctl --user daemon-reload
-systemctl --user enable --now hetzner-socks
+cp -r omarchy-setup/roman.indicators ~/.config/omarchy/plugins/
+omarchy restart shell
 ```
 
-Restart Firefox. Verify: `curl --socks5-hostname 127.0.0.1:1080 https://ifconfig.me` prints a Hetzner address, and digikey.com loads in Firefox.
+Restart Firefox. Verify: with the tunnel on, `ss -tnp | rg 127.0.0.1:1080` lists firefox and digikey.com loads; with it off, sites still load.
 
 ## After applying
 

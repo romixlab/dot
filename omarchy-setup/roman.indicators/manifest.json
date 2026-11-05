@@ -60,6 +60,11 @@
             "value": "KeepRunning",
             "label": "Keep running",
             "description": "Closing the lid doesn't suspend"
+          },
+          {
+            "value": "HetznerProxy",
+            "label": "Hetzner proxy",
+            "description": "Firefox through hetzner-1"
           }
         ]
       },
