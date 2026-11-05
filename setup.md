@@ -909,6 +909,49 @@ update-desktop-database .
 
 Verify: `omarchy menu keybindings --print` no longer lists HEY Email, X, YouTube or the Google apps.
 
+## 57. Optional: Digi-Key in Firefox through hetzner-1 (omarchy-m1)
+
+Not needed by default: skip on update unless asked. Digi-Key refuses the direct connection. Only Digi-Key goes through the tunnel, everything else stays direct. Needs KeePassXC unlocked (the key is in the agent); Digi-Key doesn't load until then. Logs in to hetzner-1 as root.
+
+`~/.config/systemd/user/hetzner-socks.service`:
+
+```ini
+[Unit]
+Description=SOCKS proxy through hetzner-1
+
+[Service]
+Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+ExecStart=/usr/bin/ssh -o BatchMode=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -N -D 127.0.0.1:1080 root@100.93.215.34
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=default.target
+```
+
+`~/.config/mozilla/hetzner.pac`:
+
+```js
+function FindProxyForURL(url, host) {
+  if (/(^|\.)digikey\.[a-z.]+$/.test(host)) return "SOCKS5 127.0.0.1:1080";
+  return "DIRECT";
+}
+```
+
+`user.js` in the Firefox profile (`~/.config/mozilla/firefox/*.default-release/`):
+
+```js
+user_pref("network.proxy.type", 2);
+user_pref("network.proxy.autoconfig_url", "file:///home/roman/.config/mozilla/hetzner.pac");
+```
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable --now hetzner-socks
+```
+
+Restart Firefox. Verify: `curl --socks5-hostname 127.0.0.1:1080 https://ifconfig.me` prints a Hetzner address, and digikey.com loads in Firefox.
+
 ## After applying
 
 ```bash
