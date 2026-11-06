@@ -968,6 +968,18 @@ systemctl --user enable --now spacemouse-menu
 
 Verify: tap the left button on a net in the PCB Editor and it highlights, tap again and it clears. Flick past the outer circle over Switch layer and the layer changes.
 
+## 59. One Chromium window for agents
+
+A separate Chromium profile that agents open their tabs in, so pages, captchas and sign-ins happen in one visible window. Remote debugging on `127.0.0.1:9222`. Chromium refuses it on the default profile, hence its own folder. The everyday browser is unaffected. Agents open a tab with `curl -s -X PUT "http://127.0.0.1:9222/json/new?URL"`, never `chromium URL` (that opens a new window). Any local process can drive this profile through the port, so keep important logins out of it.
+
+Not started at login. An agent starts it when it needs it and nothing answers on 9222:
+
+```bash
+setsid uwsm-app -- chromium --user-data-dir=$HOME/.local/share/chromium-agents --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --no-first-run --no-default-browser-check &
+```
+
+Verify: `curl -s http://127.0.0.1:9222/json/version` answers, and a tab opened with the `curl` above shows up in that window.
+
 ## After applying
 
 ```bash
