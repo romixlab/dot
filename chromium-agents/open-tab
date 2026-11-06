@@ -1,0 +1,71 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["websockets>=13"]
+# ///
+"""Open URLs as background tabs in the agents' Chromium window (setup.md §59), starting it if needed."""
+import argparse
+import asyncio
+import json
+import subprocess
+import time
+import urllib.request
+from pathlib import Path
+
+import websockets
+
+ENDPOINT = "http://127.0.0.1:9222/json/version"
+PROFILE = Path.home() / ".local/share/chromium-agents"
+CHROMIUM = [
+    "uwsm-app", "--", "chromium",
+    f"--user-data-dir={PROFILE}",
+    "--remote-debugging-port=9222",
+    "--remote-debugging-address=127.0.0.1",
+    "--no-first-run",
+    "--no-default-browser-check",
+]
+
+
+def browser_ws() -> str | None:
+    try:
+        with urllib.request.urlopen(ENDPOINT, timeout=2) as r:
+            return json.load(r)["webSocketDebuggerUrl"]
+    except OSError:
+        return None
+
+
+def ensure_browser() -> str:
+    ws = browser_ws()
+    if ws:
+        return ws
+    print("starting the agents' Chromium window")
+    subprocess.Popen(CHROMIUM, start_new_session=True,
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    for _ in range(30):
+        time.sleep(0.5)
+        if ws := browser_ws():
+            return ws
+    raise SystemExit("Chromium did not answer on 127.0.0.1:9222")
+
+
+async def open_tabs(ws_url: str, urls: list[str]) -> None:
+    async with websockets.connect(ws_url, max_size=None) as ws:
+        for i, url in enumerate(urls, 1):
+            await ws.send(json.dumps({"id": i, "method": "Target.createTarget",
+                                      "params": {"url": url, "background": True}}))
+            while (reply := json.loads(await ws.recv())).get("id") != i:
+                pass
+            if "error" in reply:
+                raise SystemExit(f"{url}: {reply['error'].get('message')}")
+            print(url)
+
+
+def main() -> None:
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("urls", nargs="+", metavar="URL")
+    args = p.parse_args()
+    asyncio.run(open_tabs(ensure_browser(), args.urls))
+
+
+if __name__ == "__main__":
+    main()
