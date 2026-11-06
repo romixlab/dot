@@ -47,10 +47,17 @@ def hyprctl(*args):
     return json.loads(subprocess.run(["hyprctl", "-j", *args], capture_output=True, text=True, check=True).stdout)
 
 
-def menu_for(menus, window):
-    if window.get("class") != "kicad":
+def menu_for(menus, clients):
+    """The menu of the focused KiCad editor, or for a KiCad dialog, of the editor focused last before it."""
+    kicad = sorted((c for c in clients if c["class"] == "kicad"), key=lambda c: c["focusHistoryID"])
+    if not kicad or kicad[0]["focusHistoryID"] != 0:
         return None
-    return next((m for m in menus if m["title"] in window.get("title", "")), None)
+    # Wayland gives no parent link and all KiCad windows share one process, so focus order stands in for it.
+    for window in kicad:
+        menu = next((m for m in menus if m["title"] in window["title"]), None)
+        if menu:
+            return menu
+    return None
 
 
 def ipc(*args):
@@ -92,7 +99,6 @@ def load_colors():
 
 
 def run(args):
-    menus = json.loads(MENUS.read_text())
     sides = {number: side for side, number in load_buttons().items()}
     shell = subprocess.Popen(["quickshell", "-n", "-p", str(SHELL)])
     held = set()
@@ -101,8 +107,10 @@ def run(args):
             sys.exit(f"quickshell exited with {shell.returncode}")
         if kind == PRESS and button in sides:
             if not held:
-                menu = menu_for(menus, hyprctl("activewindow"))
+                # Read on every press, so edits to menu.json apply without a restart.
+                menu = menu_for(json.loads(MENUS.read_text()), hyprctl("clients"))
                 if menu is None:
+                    print(f"press button {button}: no KiCad editor focused, ignored", flush=True)
                     continue
                 x, y = (hyprctl("cursorpos")[k] for k in ("x", "y"))
                 monitor = next(m for m in hyprctl("monitors") if m["focused"])

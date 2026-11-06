@@ -28,6 +28,39 @@
         {"label": "Redo", "key": "C-y"},
         {"label": "Delete", "key": "delete"},
         {"label": "Undo", "key": "C-z"},
+        {"label": "Expand connection", "key": "u"}
+      ]
+    }
+  },
+  {
+    "title": "Schematic Editor",
+    "center": {
+      "left": {"label": "Highlight net", "key": "S-grave"},
+      "right": {"label": "Draw wire", "key": "w"}
+    },
+    "rings": {
+      "left": [
+        {"label": "Add symbol", "key": "a"},
+        {"label": "Label", "key": "l"},
+        {"label": "Global label", "key": "C-l"},
+        {"label": "Power symbol", "key": "p"},
+        {"label": "No connect", "key": "q"},
+        {"label": "Esc", "key": "esc"}
+      ],
+      "right": [
+        {"label": "Copy", "key": "C-c"},
+        {"label": "Mirror", "key": "x"},
+        {"label": "Update PCB", "key": "f8"},
+        {"label": "Paste", "key": "C-v"},
+        {"label": "Rotate", "key": "r"},
+        {"label": "Properties", "key": "e"}
+      ],
+      "both": [
+        {"label": "Cut", "key": "C-x"},
+        {"label": "Drag", "key": "g"},
+        {"label": "Redo", "key": "C-y"},
+        {"label": "Delete", "key": "delete"},
+        {"label": "Undo", "key": "C-z"},
         null
       ]
     }

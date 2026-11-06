@@ -955,7 +955,7 @@ Restart Firefox. Verify: with the tunnel on, `ss -tnp | rg 127.0.0.1:1080` lists
 
 ## 58. Pie menu in KiCad on the SpaceMouse buttons
 
-Tap a SpaceMouse button in the PCB Editor to fire its centre slot. Hold it and a pie menu opens at the cursor: crossing the outer circle or clicking fires the slot under the mouse, and releasing cancels. The cursor returns to where it started, because KiCad's hotkeys act at the cursor. Each button has its own ring of 6 slots, and pressing both gives a third (`null` is a free slot). Entries and keys (keyd macros, matching `~/.config/kicad/10.0/user.hotkeys`) are in `spacemouse-menu/menu.json`. Needs step 49 and keyd. KiCad reads the keys like a physical keyboard.
+Tap a SpaceMouse button in the PCB Editor or Schematic Editor to fire its centre slot. Hold it and a pie menu opens at the cursor: crossing the outer circle or clicking fires the slot under the mouse, and releasing cancels. The cursor returns to where it started, because KiCad's hotkeys act at the cursor. Each button has its own ring of 6 slots, and pressing both gives a third (`null` is a free slot). Entries and keys (keyd macros, matching `~/.config/kicad/10.0/user.hotkeys`) are in `spacemouse-menu/menu.json`. Needs step 49 and keyd. KiCad reads the keys like a physical keyboard.
 
 The show/hide ratsnest slice needs a hotkey KiCad has no default for: in `~/.config/kicad/10.0/user.hotkeys`, with KiCad closed, set `pcbnew.Control.showRatsnest` to `Ctrl+Shift+R`.
 
