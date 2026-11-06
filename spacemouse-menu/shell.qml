@@ -22,6 +22,8 @@ ShellRoot {
   // The centre half under the mouse, the pressed button's own until the mouse moves. "both" lights neither half.
   property string centerSide: "left"
   property real openedAt: 0
+  // After a slot fires, the next one needs the mouse back in the centre first.
+  property bool armed: true
 
   readonly property var centerItem: menu ? menu.center[menu.side] : null
 
@@ -32,6 +34,7 @@ ShellRoot {
     var distance = Math.hypot(dx, dy)
     if (distance <= centerRadius) {
       hot = -1
+      armed = true
       if (dx !== 0) centerSide = dx < 0 ? "left" : "right"
       return
     }
@@ -40,12 +43,14 @@ ShellRoot {
     var angle = Math.atan2(dx, -dy) + 2 * Math.PI + step / 2
     hot = Math.floor(angle / step) % menu.ring.length
     // Crossing the outer circle fires the slice at once, without waiting for the release.
-    if (distance >= outerRadius && menu.ring[hot]) fire(menu.ring[hot])
+    if (armed && distance >= outerRadius && menu.ring[hot]) fire(menu.ring[hot])
   }
 
+  // Fires and keeps the menu open: the cursor jumps back to the centre, ready for the next
+  // action until the buttons are released.
   function fire(item) {
     console.info("fired:", item.key)
-    shown = false
+    armed = false
     Quickshell.execDetached([menu.script, "fire", item.key, String(menu.home[0]), String(menu.home[1])])
   }
 
@@ -63,6 +68,7 @@ ShellRoot {
       root.menu = JSON.parse(payload)
       root.centerSide = root.menu.side
       root.openedAt = Date.now()
+      root.armed = true
       root.shown = true
     }
 
@@ -149,17 +155,32 @@ ShellRoot {
               }
             }
 
-            Text {
+            Column {
               x: slice.labelRadius * Math.cos(slice.middle * Math.PI / 180) - width / 2
               y: slice.labelRadius * Math.sin(slice.middle * Math.PI / 180) - height / 2
               width: 96
-              horizontalAlignment: Text.AlignHCenter
-              wrapMode: Text.WordWrap
-              text: slice.modelData ? slice.modelData.label : "Free"
-              font.italic: !slice.modelData
-              opacity: slice.modelData ? 1 : 0.6
-              font.pixelSize: 14
-              color: slice.lit ? root.menu.colors.background : root.menu.colors.foreground
+              spacing: 2
+
+              Text {
+                visible: text !== ""
+                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                text: slice.modelData && slice.modelData.glyph ? slice.modelData.glyph : ""
+                font.family: root.menu.iconFont
+                font.pixelSize: 26
+                color: slice.lit ? root.menu.colors.background : root.menu.colors.accent
+              }
+
+              Text {
+                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                text: slice.modelData ? slice.modelData.label : "Free"
+                font.italic: !slice.modelData
+                opacity: slice.modelData ? 1 : 0.6
+                font.pixelSize: 14
+                color: slice.lit ? root.menu.colors.background : root.menu.colors.foreground
+              }
             }
           }
         }
@@ -194,17 +215,32 @@ ShellRoot {
               }
             }
 
-            Text {
+            Column {
               x: half.direction * root.centerRadius / 2 - width / 2
               y: -height / 2
               width: root.centerRadius - 8
-              horizontalAlignment: Text.AlignHCenter
-              wrapMode: Text.WordWrap
-              text: half.item ? half.item.label : "Free"
-              font.pixelSize: 12
-              font.italic: !half.item
-              opacity: half.item ? 1 : 0.6
-              color: half.lit && half.item ? root.menu.colors.background : root.menu.colors.foreground
+              spacing: 1
+
+              Text {
+                visible: text !== ""
+                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                text: half.item && half.item.glyph ? half.item.glyph : ""
+                font.family: root.menu.iconFont
+                font.pixelSize: 20
+                color: half.lit && half.item ? root.menu.colors.background : root.menu.colors.accent
+              }
+
+              Text {
+                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                text: half.item ? half.item.label : "Free"
+                font.pixelSize: 12
+                font.italic: !half.item
+                opacity: half.item ? 1 : 0.6
+                color: half.lit && half.item ? root.menu.colors.background : root.menu.colors.foreground
+              }
             }
           }
         }

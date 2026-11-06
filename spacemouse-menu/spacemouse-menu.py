@@ -15,6 +15,7 @@ SHELL = HERE / "shell.qml"
 MENUS = HERE / "menu.json"
 BUTTONS = Path.home() / ".config/spacemouse-menu/buttons.json"
 THEME = Path.home() / ".local/state/omarchy/current/theme/colors.toml"
+ICON_FONT = "JetBrainsMono Nerd Font"
 EVENT = struct.Struct("8i")
 MOTION, PRESS, RELEASE = 0, 1, 2
 
@@ -84,6 +85,26 @@ def fire(key, x, y):
         send_key(key)
 
 
+def load_icons():
+    """Nerd Font icons by name ("md-content_copy"), read from the font itself."""
+    try:
+        from fontTools.ttLib import TTFont
+    except ImportError:
+        print("python-fonttools is missing: the menu shows labels only", file=sys.stderr)
+        return {}
+    path = subprocess.run(["fc-match", "-f", "%{file}", ICON_FONT], capture_output=True, text=True).stdout
+    return {name: chr(code) for code, name in TTFont(path).getBestCmap().items() if code >= 0xE000}
+
+
+def with_glyphs(items, icons):
+    for item in items:
+        if item and "icon" in item:
+            if item["icon"] not in icons:
+                print(f"menu.json: no icon {item['icon']!r} in {ICON_FONT}", file=sys.stderr)
+            item["glyph"] = icons.get(item["icon"], "")
+    return items
+
+
 def load_buttons():
     if BUTTONS.exists():
         return json.loads(BUTTONS.read_text())
@@ -100,6 +121,7 @@ def load_colors():
 
 def run(args):
     sides = {number: side for side, number in load_buttons().items()}
+    icons = load_icons()
     shell = subprocess.Popen(["quickshell", "-n", "-p", str(SHELL)])
     held = set()
     for kind, button in events(args.socket):
@@ -123,8 +145,9 @@ def run(args):
                 "x": x - monitor["x"],
                 "y": y - monitor["y"],
                 "side": side,
-                "center": menu["center"],
-                "ring": menu["rings"][side],
+                "center": dict(zip(menu["center"], with_glyphs(menu["center"].values(), icons))),
+                "ring": with_glyphs(menu["rings"][side], icons),
+                "iconFont": ICON_FONT,
                 "colors": load_colors(),
                 "home": [x, y],
                 "script": str(Path(__file__).resolve()),

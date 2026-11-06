@@ -955,7 +955,7 @@ Restart Firefox. Verify: with the tunnel on, `ss -tnp | rg 127.0.0.1:1080` lists
 
 ## 58. Pie menu in KiCad on the SpaceMouse buttons
 
-Tap a SpaceMouse button in the PCB Editor or Schematic Editor to fire its centre slot. Hold it and a pie menu opens at the cursor: crossing the outer circle or clicking fires the slot under the mouse, and releasing cancels. The cursor returns to where it started, because KiCad's hotkeys act at the cursor. Each button has its own ring of 6 slots, and pressing both gives a third (`null` is a free slot). Entries and keys (keyd macros, matching `~/.config/kicad/10.0/user.hotkeys`) are in `spacemouse-menu/menu.json`. Needs step 49 and keyd. KiCad reads the keys like a physical keyboard.
+Tap a SpaceMouse button in the PCB Editor or Schematic Editor to fire its centre slot. Hold it and a pie menu opens at the cursor: crossing the outer circle or clicking fires the slot under the mouse. The menu stays open while held, so actions chain: back through the centre for the next one, release to finish. The cursor returns to where it started, because KiCad's hotkeys act at the cursor. Each button has its own ring of 6 slots, and pressing both gives a third (`null` is a free slot). Entries and keys (keyd macros, matching `~/.config/kicad/10.0/user.hotkeys`) are in `spacemouse-menu/menu.json`. Icons are JetBrainsMono Nerd Font names (`md-content_copy`), read from the font with `python-fonttools`. Needs step 49 and keyd. KiCad reads the keys like a physical keyboard.
 
 The show/hide ratsnest slice needs a hotkey KiCad has no default for: in `~/.config/kicad/10.0/user.hotkeys`, with KiCad closed, set `pcbnew.Control.showRatsnest` to `Ctrl+Shift+R`.
 
@@ -970,15 +970,15 @@ Verify: tap the left button on a net in the PCB Editor and it highlights, tap ag
 
 ## 59. One Chromium window for agents
 
-A separate Chromium profile that agents open their tabs in, so pages, captchas and sign-ins happen in one visible window. Remote debugging on `127.0.0.1:9222`. Chromium refuses it on the default profile, hence its own folder. The everyday browser is unaffected. Agents open a tab with `curl -s -X PUT "http://127.0.0.1:9222/json/new?URL"`, never `chromium URL` (that opens a new window). Any local process can drive this profile through the port, so keep important logins out of it.
+A separate Chromium profile that agents open their tabs in, so pages, captchas and sign-ins happen in one visible window. Remote debugging on `127.0.0.1:9222`. Chromium refuses it on the default profile, hence its own folder. The everyday browser is unaffected. Any local process can drive this profile through the port, so keep important logins out of it.
 
-Not started at login. An agent starts it when it needs it and nothing answers on 9222:
+Agents open pages with `chromium-agents-open-tab URL...`: background tabs, so the focus and the workspace stay where they are. It starts the window first if nothing answers on 9222. Not started at login. Never `chromium URL` (a new window) or `curl .../json/new` (switches to it).
 
 ```bash
-setsid uwsm-app -- chromium --user-data-dir=$HOME/.local/share/chromium-agents --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --no-first-run --no-default-browser-check &
+ln -s ~/git/dot/chromium-agents/open-tab ~/.local/bin/chromium-agents-open-tab
 ```
 
-Verify: `curl -s http://127.0.0.1:9222/json/version` answers, and a tab opened with the `curl` above shows up in that window.
+Verify: `chromium-agents-open-tab https://example.com` adds a tab to that window without switching to it.
 
 ## After applying
 

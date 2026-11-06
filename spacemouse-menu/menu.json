@@ -2,65 +2,65 @@
   {
     "title": "PCB Editor",
     "center": {
-      "left": {"label": "Highlight net", "key": "S-grave"},
-      "right": {"label": "Route track", "key": "x"}
+      "left": {"label": "Highlight net", "key": "S-grave", "icon": "md-format_color_highlight"},
+      "right": {"label": "Route track", "key": "x", "icon": "md-transit_connection_variant"}
     },
     "rings": {
       "left": [
-        {"label": "Change layer", "key": "v"},
-        {"label": "Place via", "key": "v"},
-        {"label": "Refill zones", "key": "b"},
-        {"label": "Show/hide ratsnest", "key": "C-S-r"},
-        {"label": "Layer view mode", "key": "h"},
-        {"label": "Esc", "key": "esc"}
+        {"label": "Change layer", "key": "v", "icon": "md-layers"},
+        {"label": "Place via", "key": "v", "icon": "md-circle_double"},
+        {"label": "Refill zones", "key": "b", "icon": "md-format_color_fill"},
+        {"label": "Show/hide ratsnest", "key": "C-S-r", "icon": "md-eye_off_outline"},
+        {"label": "Layer view mode", "key": "h", "icon": "md-contrast_box"},
+        {"label": "Esc", "key": "esc", "icon": "md-keyboard_esc"}
       ],
       "right": [
-        {"label": "Copy", "key": "C-c"},
-        {"label": "Flip to other side", "key": "f"},
-        {"label": "Update from schematic", "key": "f8"},
-        {"label": "Paste", "key": "C-v"},
-        {"label": "Draw zone", "key": "C-S-z"},
-        {"label": "Measure", "key": "C-S-m"}
+        {"label": "Copy", "key": "C-c", "icon": "md-content_copy"},
+        {"label": "Flip to other side", "key": "f", "icon": "md-flip_horizontal"},
+        {"label": "Update from schematic", "key": "f8", "icon": "md-sync"},
+        {"label": "Paste", "key": "C-v", "icon": "md-content_paste"},
+        {"label": "Draw zone", "key": "C-S-z", "icon": "md-vector_polygon"},
+        {"label": "Measure", "key": "C-S-m", "icon": "md-ruler"}
       ],
       "both": [
-        {"label": "Cut", "key": "C-x"},
-        {"label": "Move by coordinates", "key": "S-m"},
-        {"label": "Redo", "key": "C-y"},
-        {"label": "Delete", "key": "delete"},
-        {"label": "Undo", "key": "C-z"},
-        {"label": "Expand connection", "key": "u"}
+        {"label": "Cut", "key": "C-x", "icon": "md-content_cut"},
+        {"label": "Move by coordinates", "key": "S-m", "icon": "md-crosshairs_gps"},
+        {"label": "Redo", "key": "C-y", "icon": "md-redo"},
+        {"label": "Delete", "key": "delete", "icon": "md-delete"},
+        {"label": "Undo", "key": "C-z", "icon": "md-undo"},
+        {"label": "Expand connection", "key": "u", "icon": "md-vector_link"}
       ]
     }
   },
   {
     "title": "Schematic Editor",
     "center": {
-      "left": {"label": "Highlight net", "key": "S-grave"},
-      "right": {"label": "Draw wire", "key": "w"}
+      "left": {"label": "Highlight net", "key": "S-grave", "icon": "md-format_color_highlight"},
+      "right": {"label": "Draw wire", "key": "w", "icon": "md-vector_polyline"}
     },
     "rings": {
       "left": [
-        {"label": "Add symbol", "key": "a"},
-        {"label": "Label", "key": "l"},
-        {"label": "Global label", "key": "C-l"},
-        {"label": "Power symbol", "key": "p"},
-        {"label": "No connect", "key": "q"},
-        {"label": "Esc", "key": "esc"}
+        {"label": "Add symbol", "key": "a", "icon": "md-chip"},
+        {"label": "Label", "key": "l", "icon": "md-label_outline"},
+        {"label": "Global label", "key": "C-l", "icon": "md-label_variant_outline"},
+        {"label": "Power symbol", "key": "p", "icon": "md-lightning_bolt"},
+        {"label": "No connect", "key": "q", "icon": "md-close"},
+        {"label": "Esc", "key": "esc", "icon": "md-keyboard_esc"}
       ],
       "right": [
-        {"label": "Copy", "key": "C-c"},
-        {"label": "Mirror", "key": "x"},
-        {"label": "Update PCB", "key": "f8"},
-        {"label": "Paste", "key": "C-v"},
-        {"label": "Rotate", "key": "r"},
-        {"label": "Properties", "key": "e"}
+        {"label": "Copy", "key": "C-c", "icon": "md-content_copy"},
+        {"label": "Mirror", "key": "x", "icon": "md-flip_horizontal"},
+        {"label": "Update PCB", "key": "f8", "icon": "md-sync"},
+        {"label": "Paste", "key": "C-v", "icon": "md-content_paste"},
+        {"label": "Rotate", "key": "r", "icon": "md-rotate_right"},
+        {"label": "Properties", "key": "e", "icon": "md-tune"}
       ],
       "both": [
-        {"label": "Cut", "key": "C-x"},
-        {"label": "Drag", "key": "g"},
-        {"label": "Redo", "key": "C-y"},
-        {"label": "Delete", "key": "delete"},
-        {"label": "Undo", "key": "C-z"},
+        {"label": "Cut", "key": "C-x", "icon": "md-content_cut"},
+        {"label": "Drag", "key": "g", "icon": "md-drag"},
+        {"label": "Redo", "key": "C-y", "icon": "md-redo"},
+        {"label": "Delete", "key": "delete", "icon": "md-delete"},
+        {"label": "Undo", "key": "C-z", "icon": "md-undo"},
         null
       ]
     }
