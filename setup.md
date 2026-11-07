@@ -957,7 +957,7 @@ Restart Firefox. Verify: with the tunnel on, `ss -tnp | rg 127.0.0.1:1080` lists
 
 Tap a SpaceMouse button in the PCB Editor or Schematic Editor to fire its centre slot. Hold it and a pie menu opens at the cursor: crossing the outer circle or clicking fires the slot under the mouse. The menu stays open while held, so actions chain: back through the centre for the next one, release to finish. The cursor returns to where it started, because KiCad's hotkeys act at the cursor. Each button has its own ring of 6 slots, and pressing both gives a third (`null` is a free slot). Entries and keys (keyd macros, matching `~/.config/kicad/10.0/user.hotkeys`) are in `spacemouse-menu/menu.json`. Icons are JetBrainsMono Nerd Font names (`md-content_copy`), read from the font with `python-fonttools`. Needs step 49 and keyd. KiCad reads the keys like a physical keyboard.
 
-The show/hide ratsnest and copy with reference slices need hotkeys KiCad has no default for: they are in the KiCad hotkeys of step 61.
+The show/hide ratsnest slice needs a hotkey KiCad has no default for: it is in the KiCad hotkeys of step 61.
 
 ```bash
 sudo usermod -aG keyd "$USER"   # then log out and back in
@@ -984,11 +984,13 @@ Verify: `chromium-agents-open-tab https://example.com` adds a tab to that window
 
 `SUPER+ALT+LEFT/RIGHT` moves the active tab left or right in its group (mapped on the Ergodox). Omarchy's merge into the group on the left/right moves to `SUPER+CTRL+ALT+LEFT/RIGHT`; up/down merging and moving workspaces between monitors stay as they are. Dragging a tab with the mouse still merges.
 
+`SUPER+ALT+1…9` jumps to tab N, counted from the left (Omarchy binds only 1…5).
+
 ```bash
 cat omarchy-setup/group-bindings-append.lua >> ~/.config/hypr/bindings.lua
 ```
 
-Verify: `hyprctl binds -j` lists "Move tab left in group" on SUPER+ALT+LEFT.
+Verify: `hyprctl binds -j` lists "Move tab left in group" on SUPER+ALT+LEFT and "Switch to group window 9".
 
 ## 61. KiCad hotkeys and snapping
 

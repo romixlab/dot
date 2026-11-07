@@ -7,7 +7,7 @@
     },
     "rings": {
       "left": [
-        {"label": "Change layer", "key": "v", "icon": "md-layers"},
+        null,
         {"label": "Place via", "key": "v", "icon": "md-circle_double"},
         {"label": "Expand connection", "key": "u", "icon": "md-vector_link"},
         {"label": "Delete", "key": "delete", "icon": "md-delete"},
@@ -15,7 +15,7 @@
         {"label": "Esc", "key": "esc", "icon": "md-keyboard_esc"}
       ],
       "right": [
-        {"label": "Copy with reference", "key": "C-c", "icon": "md-content_copy"},
+        {"label": "Change layer", "key": "v", "icon": "md-layers"},
         {"label": "Flip to other side", "key": "f", "icon": "md-flip_horizontal"},
         {"label": "Update from schematic", "key": "f8", "icon": "md-sync"},
         {"label": "Paste", "key": "C-v", "icon": "md-content_paste"},
