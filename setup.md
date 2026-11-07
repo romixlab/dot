@@ -980,6 +980,16 @@ ln -s ~/git/dot/chromium-agents/open-tab ~/.local/bin/chromium-agents-open-tab
 
 Verify: `chromium-agents-open-tab https://example.com` adds a tab to that window without switching to it.
 
+## 59. Reorder tabs in a Hyprland group
+
+`SUPER+ALT+LEFT/RIGHT` moves the active tab left or right in its group (mapped on the Ergodox). Omarchy's merge into the group on the left/right moves to `SUPER+CTRL+ALT+LEFT/RIGHT`; up/down merging and moving workspaces between monitors stay as they are. Dragging a tab with the mouse still merges.
+
+```bash
+cat omarchy-setup/group-bindings-append.lua >> ~/.config/hypr/bindings.lua
+```
+
+Verify: `hyprctl binds -j` lists "Move tab left in group" on SUPER+ALT+LEFT.
+
 ## After applying
 
 ```bash
