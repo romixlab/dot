@@ -81,7 +81,7 @@ def fire(key, x, y):
     # KiCad's hotkeys act where the cursor is: put it back first, then let KiCad see it.
     dispatch(f"hl.dsp.cursor.move({{ x = {x}, y = {y} }})")
     if key:
-        time.sleep(0.03)
+        time.sleep(0.08)
         send_key(key)
 
 

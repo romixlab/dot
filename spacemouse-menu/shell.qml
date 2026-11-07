@@ -24,11 +24,18 @@ ShellRoot {
   property real openedAt: 0
   // After a slot fires, the next one needs the mouse back in the centre first.
   property bool armed: true
+  // While a slot fires, the pointer passes through the menu to KiCad: KiCad sees the cursor
+  // jump back home before the key arrives, and acts there instead of where it last saw it.
+  readonly property int passThroughMs: 250
+  property bool passThrough: false
   // Icons with an "animation" in menu.json play it once the menu has been held this long.
   readonly property int animateMs: 1300
   property bool lively: false
 
   readonly property var centerItem: menu ? menu.center[menu.side] : null
+
+  // A ring slice that fires flies off outwards and fades, then comes back for the next action.
+  signal sliceFired(int index)
 
   function trackMouse(x, y) {
     if (!shown) return
@@ -46,7 +53,10 @@ ShellRoot {
     var angle = Math.atan2(dx, -dy) + 2 * Math.PI + step / 2
     hot = Math.floor(angle / step) % menu.ring.length
     // Crossing the outer circle fires the slice at once, without waiting for the release.
-    if (armed && distance >= outerRadius && menu.ring[hot]) fire(menu.ring[hot])
+    if (armed && distance >= outerRadius && menu.ring[hot]) {
+      fire(menu.ring[hot])
+      sliceFired(hot)
+    }
   }
 
   // Fires and keeps the menu open: the cursor jumps back to the centre, ready for the next
@@ -54,13 +64,23 @@ ShellRoot {
   function fire(item) {
     console.info("fired:", item.key)
     armed = false
+    passThrough = true
+    passThroughEnd.restart()
     Quickshell.execDetached([menu.script, "fire", item.key, String(menu.home[0]), String(menu.home[1])])
   }
 
   function click() {
     var item = hot < 0 ? menu.center[centerSide] : menu.ring[hot]
-    if (item) fire(item)
-    else shown = false
+    if (item) {
+      fire(item)
+      if (hot >= 0) sliceFired(hot)
+    } else shown = false
+  }
+
+  Timer {
+    id: passThroughEnd
+    interval: root.passThroughMs
+    onTriggered: root.passThrough = false
   }
 
   IpcHandler {
@@ -82,6 +102,7 @@ ShellRoot {
       var key = tap && root.hot < 0 && root.centerItem ? root.centerItem.key : ""
       root.shown = false
       root.lively = false
+      root.passThrough = false
       return key
     }
   }
@@ -97,6 +118,9 @@ ShellRoot {
       WlrLayershell.namespace: "spacemouse-menu"
       WlrLayershell.layer: WlrLayer.Overlay
       WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+      mask: root.passThrough ? noInput : null
+
+      Region { id: noInput }
 
       MouseArea {
         anchors.fill: parent
@@ -140,6 +164,30 @@ ShellRoot {
             readonly property real middle: -90 + index * step
             readonly property real labelRadius: (root.outerRadius + root.centerRadius) / 2
             readonly property bool lit: root.hot === index && modelData !== null
+            // 0 at rest, 1 flown off; "back" fades it in again afterwards.
+            property real kick: 0
+            property real back: 1
+
+            opacity: (1 - kick) * back
+            transform: Translate {
+              x: 50 * slice.kick * Math.cos(slice.middle * Math.PI / 180)
+              y: 50 * slice.kick * Math.sin(slice.middle * Math.PI / 180)
+            }
+
+            Connections {
+              target: root
+              function onSliceFired(index) {
+                if (index === slice.index) flyOff.restart()
+              }
+            }
+
+            SequentialAnimation {
+              id: flyOff
+              NumberAnimation { target: slice; property: "kick"; from: 0; to: 1; duration: 260; easing.type: Easing.OutCubic }
+              PropertyAction { target: slice; property: "back"; value: 0 }
+              PropertyAction { target: slice; property: "kick"; value: 0 }
+              NumberAnimation { target: slice; property: "back"; to: 1; duration: 200; easing.type: Easing.InQuad }
+            }
 
             Shape {
               preferredRendererType: Shape.CurveRenderer

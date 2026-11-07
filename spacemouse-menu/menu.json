@@ -9,7 +9,7 @@
       "left": [
         {"label": "Move individually", "key": "C-m", "icon": "md-numeric_1_box_multiple_outline"},
         {"label": "Pack and move", "key": "p", "icon": "md-select_group"},
-        {"label": "Place via", "key": "v", "icon": "md-circle_double"},
+        {"label": "Place via", "key": "C-S-x", "icon": "md-circle_double"},
         {"label": "Expand connection", "key": "u", "icon": "md-vector_link"},
         {"label": "Delete", "key": "delete", "icon": "md-delete"},
         {"label": "Move by coordinates", "key": "S-m", "icon": "md-crosshairs_gps", "animation": "spin"},
@@ -32,8 +32,8 @@
         {"label": "Redo", "key": "C-y", "icon": "md-redo"},
         null,
         {"label": "Refill zones", "key": "b", "icon": "md-format_color_fill"},
-        {"label": "Undo", "key": "C-z", "icon": "md-undo"},
         null,
+        {"label": "Undo", "key": "C-z", "icon": "md-undo"},
         {"label": "Show/hide ratsnest", "key": "C-S-r", "icon": "md-eye_off_outline"}
       ]
     }
@@ -58,7 +58,7 @@
       "right": [
         {"label": "Copy", "key": "C-c", "icon": "md-content_copy"},
         {"label": "Mirror", "key": "x", "icon": "md-flip_horizontal"},
-        null,
+        {"label": "No connect", "key": "q", "icon": "md-close"},
         {"label": "Update PCB", "key": "f8", "icon": "md-sync"},
         {"label": "Paste", "key": "C-v", "icon": "md-content_paste"},
         {"label": "Rotate", "key": "r", "icon": "md-rotate_right"},
@@ -67,12 +67,12 @@
       ],
       "both": [
         {"label": "Save", "key": "C-s", "icon": "md-content_save", "animation": "save"},
-        {"label": "No connect", "key": "q", "icon": "md-close"},
+        null,
         {"label": "Redo", "key": "C-y", "icon": "md-redo"},
         null,
         {"label": "Global label", "key": "C-l", "icon": "md-label_variant_outline"},
-        {"label": "Undo", "key": "C-z", "icon": "md-undo"},
         null,
+        {"label": "Undo", "key": "C-z", "icon": "md-undo"},
         null
       ]
     }
