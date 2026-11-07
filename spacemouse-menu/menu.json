@@ -7,27 +7,33 @@
     },
     "rings": {
       "left": [
-        null,
+        {"label": "Move individually", "key": "C-m", "icon": "md-numeric_1_box_multiple_outline"},
+        {"label": "Pack and move", "key": "p", "icon": "md-select_group"},
         {"label": "Place via", "key": "v", "icon": "md-circle_double"},
         {"label": "Expand connection", "key": "u", "icon": "md-vector_link"},
         {"label": "Delete", "key": "delete", "icon": "md-delete"},
         {"label": "Move by coordinates", "key": "S-m", "icon": "md-crosshairs_gps", "animation": "spin"},
+        null,
         {"label": "Esc", "key": "esc", "icon": "md-keyboard_esc"}
       ],
       "right": [
-        {"label": "Change layer", "key": "v", "icon": "md-layers"},
+        {"label": "Copy", "key": "C-c", "icon": "md-content_copy"},
         {"label": "Flip to other side", "key": "f", "icon": "md-flip_horizontal"},
+        {"label": "Change layer", "key": "v", "icon": "md-layers"},
         {"label": "Update from schematic", "key": "f8", "icon": "md-sync"},
         {"label": "Paste", "key": "C-v", "icon": "md-content_paste"},
         {"label": "Draw zone", "key": "C-S-z", "icon": "md-vector_polygon"},
+        {"label": "Cut", "key": "C-x", "icon": "md-content_cut", "animation": "cut"},
         {"label": "Measure", "key": "C-S-m", "icon": "md-ruler", "animation": "stretch"}
       ],
       "both": [
-        {"label": "Cut", "key": "C-x", "icon": "md-content_cut", "animation": "cut"},
+        {"label": "Save", "key": "C-s", "icon": "md-content_save", "animation": "save"},
         {"label": "Layer view mode", "key": "h", "icon": "md-contrast_box"},
         {"label": "Redo", "key": "C-y", "icon": "md-redo"},
+        null,
         {"label": "Refill zones", "key": "b", "icon": "md-format_color_fill"},
         {"label": "Undo", "key": "C-z", "icon": "md-undo"},
+        null,
         {"label": "Show/hide ratsnest", "key": "C-S-r", "icon": "md-eye_off_outline"}
       ]
     }
@@ -42,25 +48,31 @@
       "left": [
         {"label": "Add symbol", "key": "a", "icon": "md-chip"},
         {"label": "Label", "key": "l", "icon": "md-label_outline"},
+        null,
         {"label": "Power symbol", "key": "p", "icon": "md-lightning_bolt"},
         {"label": "Delete", "key": "delete", "icon": "md-delete"},
         {"label": "Drag", "key": "g", "icon": "md-drag"},
+        null,
         {"label": "Esc", "key": "esc", "icon": "md-keyboard_esc"}
       ],
       "right": [
         {"label": "Copy", "key": "C-c", "icon": "md-content_copy"},
         {"label": "Mirror", "key": "x", "icon": "md-flip_horizontal"},
+        null,
         {"label": "Update PCB", "key": "f8", "icon": "md-sync"},
         {"label": "Paste", "key": "C-v", "icon": "md-content_paste"},
         {"label": "Rotate", "key": "r", "icon": "md-rotate_right"},
+        {"label": "Cut", "key": "C-x", "icon": "md-content_cut", "animation": "cut"},
         {"label": "Properties", "key": "e", "icon": "md-tune"}
       ],
       "both": [
-        {"label": "Cut", "key": "C-x", "icon": "md-content_cut", "animation": "cut"},
+        {"label": "Save", "key": "C-s", "icon": "md-content_save", "animation": "save"},
         {"label": "No connect", "key": "q", "icon": "md-close"},
         {"label": "Redo", "key": "C-y", "icon": "md-redo"},
+        null,
         {"label": "Global label", "key": "C-l", "icon": "md-label_variant_outline"},
         {"label": "Undo", "key": "C-z", "icon": "md-undo"},
+        null,
         null
       ]
     }

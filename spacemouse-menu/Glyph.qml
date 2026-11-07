@@ -2,7 +2,8 @@ import QtQuick
 
 // A slot's icon, its ink centred in the item so it turns and stretches about its middle.
 // "spin" turns it, "stretch" pulls it along its diagonal (the ruler), "cut" snips the
-// scissors: each half of the glyph is two opposite quadrants turning about the pivot.
+// scissors: each half of the glyph is two opposite quadrants turning about the pivot,
+// "save" sends the floppy flying up and out, and a fresh one rises into its place.
 Item {
   id: icon
 
@@ -17,8 +18,11 @@ Item {
   readonly property bool playing: icon.lively && animation !== ""
   property real stretch: 1
   property real snip: 0
+  // Up is positive: 1 is flown away above, a negative value waits below.
+  property real lift: 0
 
   visible: glyph !== ""
+  opacity: 1 - Math.min(1, Math.abs(lift))
   width: Math.round(size * 1.25)
   height: width
 
@@ -32,7 +36,8 @@ Item {
   transform: [
     Rotation { origin.x: icon.width / 2; origin.y: icon.height / 2; angle: 45 },
     Scale { origin.x: icon.width / 2; origin.y: icon.height / 2; xScale: icon.stretch },
-    Rotation { origin.x: icon.width / 2; origin.y: icon.height / 2; angle: -45 }
+    Rotation { origin.x: icon.width / 2; origin.y: icon.height / 2; angle: -45 },
+    Translate { y: -0.8 * icon.size * icon.lift }
   ]
 
   RotationAnimation on rotation {
@@ -56,6 +61,15 @@ Item {
     NumberAnimation { to: 1; duration: 160; easing.type: Easing.InQuad }
     NumberAnimation { to: 0; duration: 320; easing.type: Easing.OutQuad }
     PauseAnimation { duration: 200 }
+  }
+
+  SequentialAnimation on lift {
+    running: icon.playing && icon.animation === "save"
+    loops: Animation.Infinite
+    NumberAnimation { to: 1; duration: 500; easing.type: Easing.InQuad }
+    PropertyAction { value: -0.5 }
+    NumberAnimation { to: 0; duration: 350; easing.type: Easing.OutQuad }
+    PauseAnimation { duration: 500 }
   }
 
   // Quadrants 0..3: top left, top right, bottom left, bottom right. Uncut, they put the
