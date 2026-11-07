@@ -24,6 +24,9 @@ ShellRoot {
   property real openedAt: 0
   // After a slot fires, the next one needs the mouse back in the centre first.
   property bool armed: true
+  // Icons with an "animation" in menu.json play it once the menu has been held this long.
+  readonly property int animateMs: 1300
+  property bool lively: false
 
   readonly property var centerItem: menu ? menu.center[menu.side] : null
 
@@ -78,6 +81,7 @@ ShellRoot {
       var tap = Date.now() - root.openedAt < root.tapMs
       var key = tap && root.hot < 0 && root.centerItem ? root.centerItem.key : ""
       root.shown = false
+      root.lively = false
       return key
     }
   }
@@ -115,6 +119,12 @@ ShellRoot {
           interval: root.tapMs
           running: true
           onTriggered: pie.opacity = 1
+        }
+
+        Timer {
+          interval: root.animateMs
+          running: true
+          onTriggered: root.lively = true
         }
 
         Repeater {
@@ -161,13 +171,12 @@ ShellRoot {
               width: 96
               spacing: 2
 
-              Text {
-                visible: text !== ""
-                width: parent.width
-                horizontalAlignment: Text.AlignHCenter
-                text: slice.modelData && slice.modelData.glyph ? slice.modelData.glyph : ""
-                font.family: root.menu.iconFont
-                font.pixelSize: 26
+              Glyph {
+                anchors.horizontalCenter: parent.horizontalCenter
+                fontFamily: root.menu.iconFont
+                lively: root.lively
+                item: slice.modelData
+                size: 26
                 color: slice.lit ? root.menu.colors.background : root.menu.colors.accent
               }
 
@@ -221,13 +230,12 @@ ShellRoot {
               width: root.centerRadius - 8
               spacing: 1
 
-              Text {
-                visible: text !== ""
-                width: parent.width
-                horizontalAlignment: Text.AlignHCenter
-                text: half.item && half.item.glyph ? half.item.glyph : ""
-                font.family: root.menu.iconFont
-                font.pixelSize: 20
+              Glyph {
+                anchors.horizontalCenter: parent.horizontalCenter
+                fontFamily: root.menu.iconFont
+                lively: root.lively
+                item: half.item
+                size: 20
                 color: half.lit && half.item ? root.menu.colors.background : root.menu.colors.accent
               }
 

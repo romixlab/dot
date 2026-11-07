@@ -11,7 +11,7 @@
         {"label": "Place via", "key": "v", "icon": "md-circle_double"},
         {"label": "Expand connection", "key": "u", "icon": "md-vector_link"},
         {"label": "Delete", "key": "delete", "icon": "md-delete"},
-        {"label": "Move by coordinates", "key": "S-m", "icon": "md-crosshairs_gps"},
+        {"label": "Move by coordinates", "key": "S-m", "icon": "md-crosshairs_gps", "animation": "spin"},
         {"label": "Esc", "key": "esc", "icon": "md-keyboard_esc"}
       ],
       "right": [
@@ -20,10 +20,10 @@
         {"label": "Update from schematic", "key": "f8", "icon": "md-sync"},
         {"label": "Paste", "key": "C-v", "icon": "md-content_paste"},
         {"label": "Draw zone", "key": "C-S-z", "icon": "md-vector_polygon"},
-        {"label": "Measure", "key": "C-S-m", "icon": "md-ruler"}
+        {"label": "Measure", "key": "C-S-m", "icon": "md-ruler", "animation": "stretch"}
       ],
       "both": [
-        {"label": "Cut", "key": "C-x", "icon": "md-content_cut"},
+        {"label": "Cut", "key": "C-x", "icon": "md-content_cut", "animation": "cut"},
         {"label": "Layer view mode", "key": "h", "icon": "md-contrast_box"},
         {"label": "Redo", "key": "C-y", "icon": "md-redo"},
         {"label": "Refill zones", "key": "b", "icon": "md-format_color_fill"},
@@ -56,7 +56,7 @@
         {"label": "Properties", "key": "e", "icon": "md-tune"}
       ],
       "both": [
-        {"label": "Cut", "key": "C-x", "icon": "md-content_cut"},
+        {"label": "Cut", "key": "C-x", "icon": "md-content_cut", "animation": "cut"},
         {"label": "No connect", "key": "q", "icon": "md-close"},
         {"label": "Redo", "key": "C-y", "icon": "md-redo"},
         {"label": "Global label", "key": "C-l", "icon": "md-label_variant_outline"},
